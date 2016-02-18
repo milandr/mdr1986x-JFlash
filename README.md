@@ -1,5 +1,2 @@
-# mdr1986x-JFlash
-MCU MDR32F9Qx internal flash programming via J-Link<br>
+#MCU MDR32F9Qx flashing with J-Link
 GDB script on Python
-
-COMING SOON... ))
