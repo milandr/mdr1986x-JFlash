@@ -1,3 +1,4 @@
 *.uvoptx
 *.uvguix.*
 JLinkLog.txt
+JLinkSettings.ini
