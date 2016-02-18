@@ -6,7 +6,7 @@
  *  \copyright  See the LICENSE file.
  */
 
-#define VERSION  "0.1b2"
+#define VERSION  "0.1"
 
 #include "MDR32Fx.h"
 #include "MDR32F9Qx_rst_clk.h"
