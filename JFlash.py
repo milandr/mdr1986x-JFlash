@@ -1,7 +1,7 @@
 from __future__ import division
 
 r"""
-JFlash.py -- MCU MDR32F9Qx internal flash programming via J-Link
+JFlash.py -- GDB script for Milandr MCU 1986x flashing with J-Link
 http://github.com/in4lio/mdr1986x-JFlash/
 
 Copyright (c) 2016 Vitaly Kravtsov (in4lio@gmail.com)
