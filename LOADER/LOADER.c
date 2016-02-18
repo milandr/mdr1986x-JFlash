@@ -6,7 +6,7 @@
  *  \copyright  See the LICENSE file.
  */
 
-#define VERSION  "0.1b1"
+#define VERSION  "0.1b2"
 
 #include "MDR32Fx.h"
 #include "MDR32F9Qx_rst_clk.h"
@@ -19,18 +19,18 @@
 struct {
 
 #define BLOCK_SIZE      0x4000
-	/* buffer for incoming data */
+	/* incoming data buffer */
 	uint32_t data[ BLOCK_SIZE / sizeof( uint32_t )];
 
-	/* EEPROM address for writing */
+	/* EEPROM address of writing */
 	uint32_t addr;
 
 	/* incoming data length */
 	uint32_t len;
 
-#define IDLE           0
-#define ERASE          1
-#define WRITE_BLOCK    2
+#define IDLE            0
+#define ERASE           1
+#define WRITE_BLOCK     2
 	/* LOADER state */
 	uint32_t state;
 
@@ -131,10 +131,10 @@ int main( void )
 	NVIC->ICER[ 0 ] = 0xFFFFFFFF;  /* disable all interrupts */
 	NVIC->ICPR[ 0 ] = 0xFFFFFFFF;  /* reset all interrupts */
 
-	MDR_RST_CLK->PER_CLOCK = RST_CLK_PCLK_PORTB | RST_CLK_PCLK_PORTD | RST_CLK_PCLK_BKP	| RST_CLK_PCLK_RST_CLK
+	MDR_RST_CLK->PER_CLOCK = RST_CLK_PCLK_PORTB | RST_CLK_PCLK_PORTD | RST_CLK_PCLK_BKP | RST_CLK_PCLK_RST_CLK
 	| RST_CLK_PCLK_EEPROM;
 
-	MDR_EEPROM->CMD = ( 3 << 3 );  /* set EEPROM delay */
+	MDR_EEPROM->CMD = ( 3 << EEPROM_CMD_DELAY_Pos );  /* set EEPROM delay */
 
 	SEGGER_RTT_ConfigUpBuffer( 0, 0, 0, 0, SEGGER_RTT_MODE_BLOCK_IF_FIFO_FULL );
 	SEGGER_RTT_WriteString( 0, "\nMCU MDR32F9Qx EEPROM LOADER " VERSION "\n\n" );
