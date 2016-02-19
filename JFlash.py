@@ -9,7 +9,7 @@ See the LICENSE file.
 """
 
 APP             = 'JFlash'
-VERSION         = '0.1b1'
+VERSION         = '0.1b2'
 
 #  J-Link GDB Server
 HOST            = 'localhost'
@@ -20,8 +20,8 @@ DUMP            = 'dump.bin'
 
 #  LOADER layout (according to MAP file)
 #  NOTE: Use 'mapper.py' if you need to update the following definitions.
-LD_START        = 0x2000015D
-LD_STACK        = 0x20006880
+LD_START        = 0x2000015d
+LD_STACK        = 0x20007600
 LD_IFACE        = 0x20002004
 LD_IFACE_SZ     = 16400
 LD_RTT          = 0x20006424
@@ -181,6 +181,7 @@ while mem32( LD_STATE ) == ERASE:
 print
 print
 
+sleep( 0.2 )
 monitor( 'halt' )
 
 #  Check very first DWORD

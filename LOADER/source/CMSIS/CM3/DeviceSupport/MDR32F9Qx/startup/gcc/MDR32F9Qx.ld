@@ -2,7 +2,8 @@
 MEMORY
 {
 	FLASH (rx) : ORIGIN = 0x08000000, LENGTH = 128K
-	RAM (rwx)  : ORIGIN = 0x20000000, LENGTH = 32K
+	RAMX (rwx) : ORIGIN = 0x20000000, LENGTH = 8K
+	RAM  (rwx) : ORIGIN = 0x20002000, LENGTH = 24K
 }
 
 /* Linker script to place sections and symbol values. Should be used together
@@ -64,18 +65,18 @@ SECTIONS
 		*(.rodata*)
 
 		KEEP(*(.eh_frame*))
-	} > FLASH
+	} > RAMX
 
 	.ARM.extab :
 	{
 		*(.ARM.extab* .gnu.linkonce.armextab.*)
-	} > FLASH
+	} > RAMX
 
 	__exidx_start = .;
 	.ARM.exidx :
 	{
 		*(.ARM.exidx* .gnu.linkonce.armexidx.*)
-	} > FLASH
+	} > RAMX
 	__exidx_end = .;
 
 	/* To copy multiple ROM to RAM sections,
@@ -93,7 +94,7 @@ SECTIONS
 		LONG (__data2_start__)
 		LONG (__data2_end__ - __data2_start__)
 		__copy_table_end__ = .;
-	} > FLASH
+	} > RAMX
 	*/
 
 	/* To clear multiple BSS sections,
@@ -109,7 +110,7 @@ SECTIONS
 		LONG (__bss2_start__)
 		LONG (__bss2_end__ - __bss2_start__)
 		__zero_table_end__ = .;
-	} > FLASH
+	} > RAMX
 	*/
 
 	__etext = .;
