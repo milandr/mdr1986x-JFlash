@@ -4,12 +4,14 @@ r"""
 JFlash.py -- GDB script for Milandr MCU 1986x flashing with J-Link
 http://github.com/in4lio/mdr1986x-JFlash/
 
+Usage: gdb-py --batch -x JFlash.py -ex "py program(<BINARY_FILE>, <LOG_FILE>)"
+
 Copyright (c) 2016 Vitaly Kravtsov (in4lio@gmail.com)
 See the LICENSE file.
 """
 
 APP             = 'JFlash'
-VERSION         = '0.1b2'
+VERSION         = '0.2b1'
 
 #  J-Link GDB Server
 HOST            = 'localhost'
@@ -52,11 +54,18 @@ EEPROM_START    = 0x08000000
 import gdb
 import sys
 import os
+import logging
 from time import sleep
 import filecmp
 
-#  Message prefix
-JF = '(%s):' % APP
+#  Logging
+LOG             = APP + '.log'
+LOG_LEVEL       = logging.DEBUG
+LOG_FORMAT      = '%(asctime)s.%(msecs)03d %(levelname)-8s %(message)s'
+LOG_TIME        = '%H:%M:%S'
+
+log = logging.getLogger( 'log' )
+log.setLevel( LOG_LEVEL )
 
 #  MCU registers
 #  R0 .. R15
@@ -106,144 +115,153 @@ def load_binary( fn, offset, start=None, end=None ):
 def dump_binary( fn, offset, l ):
     return execute( 'dump binary memory %s %d %d' % ( fn, offset, offset + l ))
 
-#  Cancel script
-def quit( status=0 ):
-    print
-    print JF, 'Bye!'
-    sys.exit( status )
-
 #  Directory of script
 SCRIPT_DIR = os.path.dirname( os.path.realpath( __file__ ))
 
+#  MAIN SCRIPT
 
-#  THE SCRIPT START
+def program( binary, logfile = LOG ):
+    if logfile:
+        try:
+            h = logging.FileHandler( logfile, mode = 'w' )
+        except Exception:
+            logfile = None
 
-print
-print JF, 'MCU MDR32F9Qx %s %s' % ( APP, VERSION )
-print
+    if not logfile:
+        h = logging.StreamHandler( sys.stdout )
 
-#  Check that binary file is specified
-if 'binary' not in globals() or not binary:
-    print JF, """Usage: gdb --batch -ex "py binary = '<FILE>'" -x %s.py""" % APP
-    quit( 2 )
+    h.setFormatter( logging.Formatter( LOG_FORMAT, LOG_TIME ))
+    log.addHandler( h )
 
-if not os.path.exists( binary ):
-    print JF, 'ERROR: Binary file not found (%s).' % binary
-    quit( 2 )
+    log.info( 'MCU MDR32F9Qx %s %s', APP, VERSION )
 
-binary_sz = os.path.getsize( binary )
+    if not os.path.exists( binary ):
+        log.error( 'Binary file not found (%s).', binary )
+        return False
 
-print JF, 'Binary file: %s' % binary
-print JF, 'Size: %d' % binary_sz
-print JF, 'MCU data buffer at %#X' % LD_DATA
-print
+    binary_sz = os.path.getsize( binary )
 
-execute( 'set pagination off' )
+    log.info( 'Binary file: %s', binary )
+    log.info( 'Size: %d', binary_sz )
+    log.info( 'MCU data buffer at %#X', LD_DATA )
 
-print JF, 'J-Link GDB Server connecting...'
-try:
-    execute( 'target remote %s:%d' % ( HOST, PORT ))
+    execute( 'set pagination off' )
 
-except Exception as e:
-    print JF, 'ERROR: Fail to connect.'
-    print e.message
-    print
-    print JF, 'Please start J-Link GDB Server first.'
-    quit( 1 )
+    log.info( 'J-Link GDB Server connecting...' )
+    try:
+        execute( 'target remote %s:%d' % ( HOST, PORT ))
 
-print JF, 'Hello!'
+    except Exception as e:
+        log.error( 'Fail to connect.' )
+        log.info( e.message )
+        log.info( 'Please start J-Link GDB Server first.' )
+        return False
 
-print monitor( 'reset 0' )
-monitor( 'halt' )
+    log.info( 'Hello!' )
 
-print JF, 'LOADER uploading...'
-print load_binary( os.path.join( SCRIPT_DIR, LOADER ), RAM_START )
-set_reg( MSP, LD_STACK )
-set_reg( PC , LD_START & ~1 )
-set_mem32( 0xE000E008, 0x20000000 )
+    #  LOAD RAM AGENT
 
-#  ERASE EEPROM
-
-print JF, 'EEPROM erasing...'
-monitor( 'go' )
-
-#  Check erasing is started
-sleep( 0.1 )
-if mem32( LD_STATE ) != ERASE:
-    print JF, 'ERROR: LOADER is not running.'
-    quit( 1 )
-
-#  Wait for ending
-print JF,
-while mem32( LD_STATE ) == ERASE:
-    print '>',
-    sleep( 0.2 )
-print
-print
-
-sleep( 0.2 )
-monitor( 'halt' )
-
-#  Check very first DWORD
-if mem32( EEPROM_START ) != 0xFFFFFFFF:
-    print JF, 'ERROR: EEPROM is not empty.'
-    quit( 1 )
-
-#  WRITING CYCLE
-
-rest = binary_sz
-block = 0
-start = 0
-while ( rest ):
-    if rest > LD_DATA_SZ:
-        sz = LD_DATA_SZ
-        rest -= LD_DATA_SZ
-    else:
-        sz = rest
-        rest = 0
-
-    block += 1
-    print JF, 'BLOCK %d writing...' % block
-    print load_binary( binary, LD_DATA - start, start, start + sz )
-
-    set_mem32( LD_ADDR, EEPROM_START + start )
-    set_mem32( LD_LEN, ( sz + 3 ) // 4 )  # size in DWORDs
-    set_mem32( LD_STATE, WRITE_BLOCK )
-
-    monitor( 'go' )
-
-    sleep( 0.1 )
-    #  Wait for ending
-    while mem32( LD_STATE ) == WRITE_BLOCK:
-        sleep( 0.2 )
-
+    fb = monitor( 'reset 0' )
+    log.debug( fb.strip())
     monitor( 'halt' )
 
-    #  Check error
-    if mem32( LD_ERR ) != ERR_NONE:
-        print JF, 'ERROR: Fail to write data (E%d).' % mem32( LD_ERR )
-        quit( 1 )
+    log.info( 'LOADER uploading...' )
+    fb = load_binary( os.path.join( SCRIPT_DIR, LOADER ), RAM_START )
+    log.debug( fb.strip())
+    set_reg( MSP, LD_STACK )
+    set_reg( PC , LD_START & ~1 )
+    set_mem32( 0xE000E008, 0x20000000 )
 
-    start += sz
+    #  ERASE EEPROM
 
-#  VERIFY
+    log.info( 'EEPROM erasing...' )
+    monitor( 'go' )
 
-print JF, 'EEPROM verification...'
-dump = os.path.join( SCRIPT_DIR, DUMP )
-dump_binary( dump, EEPROM_START, binary_sz )
+    #  Check erasing is started
+    sleep( 0.1 )
+    if mem32( LD_STATE ) != ERASE:
+        log.error( 'LOADER is not running.' )
+        return False
 
-#  Compare binary file with dump
-if not filecmp.cmp( binary, dump ):
-    print JF, 'ERROR: Binary file does NOT match EEPROM content.'
-    quit( 1 )
+    #  Wait for ending
+    while mem32( LD_STATE ) == ERASE:
+        log.info( 'TICK' )
+        sleep( 0.2 )
 
-print
-print JF, '######## SUCCESS! ########'
-print
+    sleep( 0.2 )
+    monitor( 'halt' )
 
-monitor( 'go' )
-print monitor( 'reset 0' )
+    #  Check very first DWORD
+    if mem32( EEPROM_START ) != 0xFFFFFFFF:
+        log.error( 'EEPROM is not empty.' )
+        return False
 
-print JF, 'Bye!'
+    #  WRITING CYCLE
 
-#  THE END
+    rest = binary_sz
+    block = 0
+    start = 0
+    while ( rest ):
+        if rest > LD_DATA_SZ:
+            sz = LD_DATA_SZ
+            rest -= LD_DATA_SZ
+        else:
+            sz = rest
+            rest = 0
+
+        block += 1
+        log.info( 'BLOCK %d writing...', block )
+        fb = load_binary( binary, LD_DATA - start, start, start + sz )
+        log.debug( fb.strip())
+
+        set_mem32( LD_ADDR, EEPROM_START + start )
+        set_mem32( LD_LEN, ( sz + 3 ) // 4 )  # size in DWORDs
+        set_mem32( LD_STATE, WRITE_BLOCK )
+
+        monitor( 'go' )
+
+        sleep( 0.1 )
+        #  Wait for ending
+        while mem32( LD_STATE ) == WRITE_BLOCK:
+            sleep( 0.2 )
+
+        monitor( 'halt' )
+
+        #  Check error
+        if mem32( LD_ERR ) != ERR_NONE:
+            log.error( 'Fail to write data (E%d).', mem32( LD_ERR ))
+            return False
+
+        start += sz
+
+    #  VERIFY
+
+    log.info( 'EEPROM verification...' )
+    dump = os.path.join( SCRIPT_DIR, DUMP )
+    dump_binary( dump, EEPROM_START, binary_sz )
+
+    #  Compare binary file with dump
+    if not filecmp.cmp( binary, dump ):
+        log.error( 'Binary file does NOT match EEPROM content.' )
+        return False
+
+    log.info( '**** SUCCESS! ****' )
+
+    monitor( 'go' )
+    fb = monitor( 'reset 0' )
+
+    log.info( fb.strip())
+
+    log.removeHandler( h )
+    return True
+
+
+#  Redefine GDB 'load' command
+class LoadCommand( gdb.Command ):
+    def __init__( self ):
+        super( type( self ), self ).__init__ ( 'load', gdb.COMMAND_FILES )
+
+    def invoke( self, arg, from_tty ):
+        program( arg )
+
+LoadCommand()
