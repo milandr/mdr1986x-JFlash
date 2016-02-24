@@ -2,8 +2,6 @@ from __future__ import division
 
 r"""
 mapper.py -- Configure JFlash according to LOADER layout
-
-'Usage: mapper.py (ARMCC|GCC)' - COMING SOON)))
 """
 
 import sys, os
@@ -11,8 +9,14 @@ import fileinput
 import re
 from shutil import copyfile
 
-DIR_BINARY = './ARMCC-MDR32F9Qx/'
-DIR_SCRIPT = '../'
+DIR_SCRIPT  = '../'
+DIR_ARMCC   = './ARMCC-MDR32F9Qx/'
+DIR_GCC     = './GCC-MDR32F9Qx/'
+
+if len( sys.argv ) < 2:
+    sys.exit( 'Usage: %s (ARMCC|GCC)' % os.path.basename(__file__))
+
+DIR_BINARY  = DIR_ARMCC
 
 FILE_MAP    = 'LOADER.map'
 FILE_BINARY = 'LOADER.bin'
