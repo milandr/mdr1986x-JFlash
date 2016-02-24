@@ -11,7 +11,7 @@ See the LICENSE file.
 """
 
 APP             = 'JFlash'
-VERSION         = '0.2b1'
+VERSION         = '0.3b1'
 
 #  J-Link GDB Server
 HOST            = 'localhost'
@@ -37,7 +37,7 @@ LD_STATE        = LD_LEN   + LD_FIELD_SZ
 LD_ERR          = LD_STATE + LD_FIELD_SZ
 
 #  LOADER state
-IDLE            = 0
+IDLE            = 0xFFFFFFFF
 ERASE           = 1
 WRITE_BLOCK     = 2
 
@@ -118,21 +118,10 @@ def dump_binary( fn, offset, l ):
 #  Directory of script
 SCRIPT_DIR = os.path.dirname( os.path.realpath( __file__ ))
 
-#  MAIN SCRIPT
 
-def program( binary, logfile = LOG ):
-    if logfile:
-        try:
-            h = logging.FileHandler( logfile, mode = 'w' )
-        except Exception:
-            logfile = None
+#  EEPROM PROGRAM SCRIPT
 
-    if not logfile:
-        h = logging.StreamHandler( sys.stdout )
-
-    h.setFormatter( logging.Formatter( LOG_FORMAT, LOG_TIME ))
-    log.addHandler( h )
-
+def program( binary ):
     log.info( 'MCU MDR32F9Qx %s %s', APP, VERSION )
 
     if not os.path.exists( binary ):
@@ -144,18 +133,6 @@ def program( binary, logfile = LOG ):
     log.info( 'Binary file: %s', binary )
     log.info( 'Size: %d', binary_sz )
     log.info( 'MCU data buffer at %#X', LD_DATA )
-
-    execute( 'set pagination off' )
-
-    log.info( 'J-Link GDB Server connecting...' )
-    try:
-        execute( 'target remote %s:%d' % ( HOST, PORT ))
-
-    except Exception as e:
-        log.error( 'Fail to connect.' )
-        log.info( e.message )
-        log.info( 'Please start J-Link GDB Server first.' )
-        return False
 
     log.info( 'Hello!' )
 
@@ -171,17 +148,20 @@ def program( binary, logfile = LOG ):
     set_reg( MSP, LD_STACK )
     set_reg( PC , LD_START & ~1 )
     set_mem32( 0xE000E008, 0x20000000 )
+    monitor( 'go' )
+
+    #  Check LOADER is started
+    sleep( 0.1 )
+    if mem32( LD_STATE ) != IDLE:
+        log.error( 'LOADER is not running.' )
+        return False
 
     #  ERASE EEPROM
 
     log.info( 'EEPROM erasing...' )
+    monitor( 'halt' )
+    set_mem32( LD_STATE, ERASE )
     monitor( 'go' )
-
-    #  Check erasing is started
-    sleep( 0.1 )
-    if mem32( LD_STATE ) != ERASE:
-        log.error( 'LOADER is not running.' )
-        return False
 
     #  Wait for ending
     while mem32( LD_STATE ) == ERASE:
@@ -234,7 +214,7 @@ def program( binary, logfile = LOG ):
 
         start += sz
 
-    #  VERIFY
+    #  VERIFY EEPROM
 
     log.info( 'EEPROM verification...' )
     dump = os.path.join( SCRIPT_DIR, DUMP )
@@ -249,19 +229,60 @@ def program( binary, logfile = LOG ):
 
     monitor( 'go' )
     fb = monitor( 'reset 0' )
-
     log.info( fb.strip())
 
-    log.removeHandler( h )
     return True
 
 
-#  Redefine GDB 'load' command
+def program_from_eclipse( binary ):
+    #  Write log to file
+    h = logging.FileHandler( LOG, mode = 'w' )
+    h.setFormatter( logging.Formatter( LOG_FORMAT, LOG_TIME ))
+    log.addHandler( h )
+    try:
+        result = program( binary )
+
+    except Exception as e:
+        log.exception( str( e ))
+        result = False
+
+    log.removeHandler( h )
+    return result
+
+
+def program_from_shell( binary ):
+    #  Write log to stdout
+    h = logging.StreamHandler( sys.stdout )
+    h.setFormatter( logging.Formatter( LOG_FORMAT, LOG_TIME ))
+    log.addHandler( h )
+
+    execute( 'set pagination off' )
+    log.info( 'J-Link GDB Server connecting...' )
+    try:
+        execute( 'target remote %s:%d' % ( HOST, PORT ))
+
+    except Exception as e:
+        log.error( 'Fail to connect.' )
+        log.info( e.message )
+        log.info( 'Please start J-Link GDB Server first.' )
+        log.removeHandler( h )
+        return False
+
+    result = program( binary )
+
+    log.removeHandler( h )
+    return result
+
+
+#  Redefine GDB "load" command
 class LoadCommand( gdb.Command ):
     def __init__( self ):
-        super( type( self ), self ).__init__ ( 'load', gdb.COMMAND_FILES )
+        super( type( self ), self ).__init__( 'load', gdb.COMMAND_FILES )
 
     def invoke( self, arg, from_tty ):
-        program( arg )
+        if not program_from_eclipse( arg ):
+            #  Cancel debugging
+            execute( 'quit' )
+
 
 LoadCommand()
