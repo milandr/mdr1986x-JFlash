@@ -6,7 +6,7 @@
  *  \copyright  See the LICENSE file.
  */
 
-#define VERSION  "0.2"
+#define VERSION  "0.3"
 
 #include "MDR32Fx.h"
 #include "MDR32F9Qx_rst_clk.h"
@@ -28,7 +28,7 @@ struct {
 	/* incoming data length */
 	uint32_t len;
 
-#define IDLE            0
+#define IDLE            (( uint32_t ) -1 )
 #define ERASE           1
 #define WRITE_BLOCK     2
 	/* LOADER state */
@@ -41,7 +41,7 @@ struct {
 	/* last error */
 	uint32_t err;
 
-} iface;
+} iface = { 0 };
 
 void usleep( uint32_t val )
 {
@@ -140,17 +140,24 @@ int main( void )
 	SEGGER_RTT_WriteString( 0, "\nMCU MDR32F9Qx EEPROM LOADER " VERSION "\n\n" );
 	SEGGER_RTT_printf( 0, "data buffer at 0x%x\n", &iface.data );
 
-	iface.state = ERASE;
 	iface.err = ERR_NONE;
-	/* EEPROM erasing */
-	eeprom_erase();
-
 	iface.state = IDLE;
-	/* EEPROM writing cycle */
+
 	while ( 1 ) {
-		if ( iface.state == WRITE_BLOCK ) {
+		switch ( iface.state ) {
+
+		/* EEPROM erasing */
+		case ERASE:
+			eeprom_erase();
+			iface.err = ERR_NONE;
+			iface.state = IDLE;
+			break;
+
+		/* EEPROM writing */
+		case WRITE_BLOCK:
 			iface.err = eeprom_write_block( iface.addr, iface.data, iface.len );
 			iface.state = IDLE;
+			break;
 		}
 	}
 }
