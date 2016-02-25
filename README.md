@@ -1,3 +1,5 @@
 # Milandr MCU 1986x flashing with J-Link
-GDB script on Python for internal flash programming with J-Link.<br>
-Only MDR32F9Qx series is supported at the present time.
+
+## What's this project for?
+
+Debugging on Milandr MCU 1986x series using Eclipse with original SEGGER J-Link drivers and EERPROM programming using GNU toolchain.
