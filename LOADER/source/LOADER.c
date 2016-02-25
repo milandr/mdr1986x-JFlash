@@ -6,7 +6,7 @@
  *  \copyright  See the LICENSE file.
  */
 
-#define VERSION  "0.3"
+#define VERSION  "0.4"
 
 #include "MDR32Fx.h"
 #include "MDR32F9Qx_rst_clk.h"
@@ -28,10 +28,11 @@ struct {
 	/* incoming data length */
 	uint32_t len;
 
-#define IDLE            (( uint32_t ) -1 )
+#define START           0
 #define ERASE           1
 #define WRITE_BLOCK     2
-	/* LOADER state */
+#define IDLE            (( uint32_t ) -1 )
+	/* LOADER running command or state */
 	uint32_t state;
 
 #define ERR_NONE        0
@@ -41,7 +42,7 @@ struct {
 	/* last error */
 	uint32_t err;
 
-} iface = { 0 };
+} iface;
 
 void usleep( uint32_t val )
 {

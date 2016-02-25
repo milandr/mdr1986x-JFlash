@@ -11,7 +11,7 @@ See the LICENSE file.
 """
 
 APP             = 'JFlash'
-VERSION         = '0.3b1'
+VERSION         = '0.4b1'
 
 #  J-Link GDB Server
 HOST            = 'localhost'
@@ -36,10 +36,11 @@ LD_LEN          = LD_ADDR  + LD_FIELD_SZ
 LD_STATE        = LD_LEN   + LD_FIELD_SZ
 LD_ERR          = LD_STATE + LD_FIELD_SZ
 
-#  LOADER state
-IDLE            = 0xFFFFFFFF
+#  LOADER running command or state
+START           = 0
 ERASE           = 1
 WRITE_BLOCK     = 2
+IDLE            = 0xFFFFFFFF
 
 #  LOADER error
 ERR_NONE        = 0
@@ -118,8 +119,15 @@ def dump_binary( fn, offset, l ):
 #  Directory of script
 SCRIPT_DIR = os.path.dirname( os.path.realpath( __file__ ))
 
+#  Verify EEPROM
+def verify( binary, binary_sz ):
+    dump = os.path.join( SCRIPT_DIR, DUMP )
+    dump_binary( dump, EEPROM_START, binary_sz )
 
-#  EEPROM PROGRAM SCRIPT
+    return filecmp.cmp( binary, dump )
+
+
+#  MAIN SCRIPT
 
 def program( binary ):
     log.info( 'MCU MDR32F9Qx %s %s', APP, VERSION )
@@ -136,11 +144,19 @@ def program( binary ):
 
     log.info( 'Hello!' )
 
-    #  LOAD RAM AGENT
-
     fb = monitor( 'reset 0' )
     log.debug( fb.strip())
     monitor( 'halt' )
+
+    #  VERIFY EEPROM BEFORE PROGRAMMING
+
+    if verify( binary, binary_sz ):
+        log.info( 'Binary file exactly matches with EEPROM content.' )
+
+        monitor( 'go' )
+        return True
+
+    #  START LOADER
 
     log.info( 'LOADER uploading...' )
     fb = load_binary( os.path.join( SCRIPT_DIR, LOADER ), RAM_START )
@@ -148,6 +164,7 @@ def program( binary ):
     set_reg( MSP, LD_STACK )
     set_reg( PC , LD_START & ~1 )
     set_mem32( 0xE000E008, 0x20000000 )
+    set_mem32( LD_STATE, START )
     monitor( 'go' )
 
     #  Check LOADER is started
@@ -214,15 +231,10 @@ def program( binary ):
 
         start += sz
 
-    #  VERIFY EEPROM
+    #  VERIFY EEPROM AFTER PROGRAMMING
 
-    log.info( 'EEPROM verification...' )
-    dump = os.path.join( SCRIPT_DIR, DUMP )
-    dump_binary( dump, EEPROM_START, binary_sz )
-
-    #  Compare binary file with dump
-    if not filecmp.cmp( binary, dump ):
-        log.error( 'Binary file does NOT match EEPROM content.' )
+    if not verify( binary, binary_sz ):
+        log.error( 'Binary file does NOT match with EEPROM content.' )
         return False
 
     log.info( '**** SUCCESS! ****' )
@@ -234,6 +246,7 @@ def program( binary ):
     return True
 
 
+#  Wrapper for program EEPROM from Eclipce
 def program_from_eclipse( binary ):
     #  Write log to file
     h = logging.FileHandler( LOG, mode = 'w' )
@@ -249,7 +262,7 @@ def program_from_eclipse( binary ):
     log.removeHandler( h )
     return result
 
-
+#  Wrapper for program EEPROM from shell
 def program_from_shell( binary ):
     #  Write log to stdout
     h = logging.StreamHandler( sys.stdout )
@@ -274,15 +287,15 @@ def program_from_shell( binary ):
     return result
 
 
-#  Redefine GDB "load" command
+#  GDB "load" command
 class LoadCommand( gdb.Command ):
     def __init__( self ):
+        #  Redefine "load" command
         super( type( self ), self ).__init__( 'load', gdb.COMMAND_FILES )
 
     def invoke( self, arg, from_tty ):
         if not program_from_eclipse( arg ):
             #  Cancel debugging
             execute( 'quit' )
-
 
 LoadCommand()
