@@ -4,7 +4,7 @@ r"""
 JFlash.py -- GDB script for Milandr MCU 1986x flashing with J-Link
 http://github.com/in4lio/mdr1986x-JFlash/
 
-Usage: gdb-py --batch -x JFlash.py -ex "py program(<BINARY_FILE>, <LOG_FILE>)"
+Usage: gdb-py --batch -x JFlash.py -ex "py program_from_shell(<bin_file>)"
 
 Copyright (c) 2016 Vitaly Kravtsov (in4lio@gmail.com)
 See the LICENSE file.
