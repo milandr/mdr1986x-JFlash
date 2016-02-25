@@ -13,16 +13,12 @@ DIR_SCRIPT  = '../'
 DIR_ARMCC   = './ARMCC-MDR32F9Qx/'
 DIR_GCC     = './GCC-MDR32F9Qx/'
 
-if len( sys.argv ) < 2:
-    sys.exit( 'Usage: %s (ARMCC|GCC)' % os.path.basename(__file__))
-
-DIR_BINARY  = DIR_ARMCC
-
 FILE_MAP    = 'LOADER.map'
 FILE_BINARY = 'LOADER.bin'
 FILE_SCRIPT = 'JFlash.py'
 
 VARIABLES = (
+    'LD_COMPILER',
     'LD_START',
     'LD_STACK',
     'LD_IFACE',
@@ -30,18 +26,32 @@ VARIABLES = (
     'LD_RTT'
 )
 
-RE_ADDR = r"\s*%s\s*(0x[0-9a-fA-F]+)"
-RE_SIZE = r"\s*%s\s*0x[0-9a-fA-F]+\s*Data\s*([0-9]+)"
+CC_LIST = ( 'ARMCC', 'GCC' )
+
+if ( len( sys.argv ) < 2 ) or ( sys.argv[ 1 ].upper() not in CC_LIST ):
+    sys.exit( 'Usage: %s (%s|%s)' % ( os.path.basename(__file__), CC_LIST[ 0 ], CC_LIST[ 1 ]))
+
+CC = CC_LIST.index( sys.argv[ 1 ].upper())
+
+if CC == 0:
+    DIR_BINARY = DIR_ARMCC
+    RE_ADDR    = r"\s+%s\s+(0x[0-9a-fA-F]+)"
+    RE_SIZE    = r"\s+%s\s+0x[0-9a-fA-F]+\s+Data\s+([0-9]+)"
+else:
+    DIR_BINARY = DIR_GCC
+    RE_ADDR    = r"\s+(0x[0-9a-fA-F]+)\s+%s\s*"
+    RE_SIZE    = r"%s\s+(0x[0-9a-fA-F]+)"
 
 RE_LIST = (
-    RE_ADDR % 'Reset_Handler',
-    RE_ADDR % '__initial_sp',
-    RE_ADDR % 'iface',
-    RE_SIZE % 'iface',
-    RE_ADDR % '_SEGGER_RTT'
+    '',
+    RE_ADDR % ( 'Reset_Handler' ),
+    RE_ADDR % ( '__initial_sp' if CC == 0 else '__StackTop' ),
+    RE_ADDR % ( 'iface' ),
+    RE_SIZE % ( 'iface' ),
+    RE_ADDR % ( '_SEGGER_RTT' )
 )
 
-RE_VAR  = r'^(%s\s*=\s*)(0x[0-9a-fA-F]+|[0-9]+)(.*)'
+RE_VAR = r'^(%s\s*=\s*)(0x[0-9a-fA-F]+|[0-9]+)(.*)'
 
 os.chdir( os.path.dirname( os.path.realpath( __file__ )))
 fn_binary = DIR_BINARY + FILE_BINARY
@@ -54,6 +64,7 @@ with open( fn_map ) as f:
     MAP = f.readlines()
 
 values = [ None ] * len( VARIABLES )
+values[ 0 ] = str( CC )
 re_list = [ re.compile( x ) for x in RE_LIST ]
 for ln in MAP:
     for i, var in enumerate( VARIABLES ):

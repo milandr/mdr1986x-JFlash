@@ -11,7 +11,7 @@ See the LICENSE file.
 """
 
 APP             = 'JFlash'
-VERSION         = '0.4b1'
+VERSION         = '0.4b2'
 
 #  J-Link GDB Server
 HOST            = 'localhost'
@@ -22,11 +22,12 @@ DUMP            = 'dump.bin'
 
 #  LOADER layout (according to MAP file)
 #  NOTE: Use 'mapper.py' if you need to update the following definitions.
-LD_START        = 0x2000015d
-LD_STACK        = 0x20007600
-LD_IFACE        = 0x20002004
-LD_IFACE_SZ     = 16400
-LD_RTT          = 0x20006424
+LD_COMPILER     = 1
+LD_START        = 0x20000b3c
+LD_STACK        = 0x20008000
+LD_IFACE        = 0x2000248c
+LD_IFACE_SZ     = 0x4010
+LD_RTT          = 0x20002414
 
 LD_FIELD_SZ     = 4
 LD_DATA         = LD_IFACE
