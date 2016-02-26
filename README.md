@@ -60,8 +60,12 @@ In the debugger launch configuration `GDB SEGGER J-Link Debugging → Debugger`,
 - Replace `gdb` with `gdb-py` in `GDB Client Setup → Executable`.
 - Add `-x JFlash.py` into `GDB Client Setup → Other options` (use the filename with full path).
 
+![screenshot](doc/pic/README_01.png)
+
 Also, in `GDB SEGGER J-Link Debugging → Startup`, you should select<br>
 `Load Symbols and Executable → Load Executable → Use file:`, and add the name of binary file.
+
+![screenshot](doc/pic/README_02.png)
 
 The `JFlash.py` script redefines GDB `load` command, so when Eclipse calls `load`, the script runs instead.<br>
 The script creates `JFlash.log` in the folder of the current project.
