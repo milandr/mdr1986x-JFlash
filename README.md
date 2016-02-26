@@ -29,8 +29,7 @@ only with native drivers.
 
 #### Any limits?
 
-Yes, at present only MDR1986BE9x (MDR32F9Qx) series is supported.
-
+Yes, at present only MDR1986BE9x (MDR32F9Qx) series is supported.<br>
 It hasn't been tested on Linux yet...
 
 #### How to program EEPROM using GNU toolchain
@@ -56,8 +55,13 @@ arm-none-eabi-gdb-py --batch -x JFlash.py -ex "py program_from_shell('yourapp.bi
 - Install [GNU ARM Eclipse](http://gnuarmeclipse.github.io/install/).
 - Configure [J-Link debugging Eclipse plug-in](http://gnuarmeclipse.github.io/debug/jlink/).
 
-In the debugger launch configuration `GDB SEGGER J-Link Debugging → Debugger → GDB Client Setup`, you should:
-- Replace `gdb` with `gdb-py` in `Executable`.
-- Add `-x JFlash.py` into `Other options` (use the filename with full path).
+In the debugger launch configuration `GDB SEGGER J-Link Debugging → Debugger`, you should:
+- Set `"Cortex-M3"` into `J-Link GDB Server Setup → Device name`.
+- Replace `gdb` with `gdb-py` in `GDB Client Setup → Executable`.
+- Add `-x JFlash.py` into `GDB Client Setup → Other options` (use the filename with full path).
+
+Also, you should select `Load Symbols and Executable → Load Executable → Use file:` in
+`GDB SEGGER J-Link Debugging → Startup`, and add the name of binary file.
 
 The `JFlash.py` script redefines GDB `load` command, so when Eclipse calls `load`, the script runs instead.
+The script creates `JFlash.log` in the folder of the current project.
