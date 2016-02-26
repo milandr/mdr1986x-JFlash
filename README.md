@@ -16,3 +16,12 @@ instead of the native drivers for debugging with GNU ARM Eclipse. It's quite goo
 [OpenOCD debugging Eclipse plug-in](http://gnuarmeclipse.github.io/debug/openocd/)
 does not support capturing of Serial Wire Output (SWO).<br>
 Also you are able to use SEGGER [Real Time Transfer](https://www.segger.com/jlink-rtt.html) (RTT) only with the native drivers.
+
+#### How does it work?
+
+- LOADER implements EEPROM programming algorithm.
+- GDB script on Python redefines the GDB load command.
+
+#### Any limits?
+
+Yes, at present only MDR1986BE9x (MDR32F9Qx) series is supported.
