@@ -42,7 +42,7 @@ It hasn't been tested on Linux yet...
 
 To program EEPROM, run the command:
 ```
-> JFlash.bat <BIN_FILE>
+JFlash.bat <BIN_FILE>
 ```
 The batch file starts J-Link GDB server at first, then runs GDB client with JFlash script
 and the binary file as arguments. Something in this way:
@@ -58,6 +58,6 @@ arm-none-eabi-gdb-py --batch -x JFlash.py -ex "py program_from_shell('yourapp.bi
 
 In the debugger launch configuration `GDB SEGGER J-Link Debugging → Debugger → GDB Client Setup`, you should:
 - Replace `gdb` with `gdb-py` in `Executable`.
-- Add `-x JFlash.py` into `Other options`.
+- Add `-x JFlash.py` into `Other options` (use the filename with full path).
 
 The `JFlash.py` script redefines GDB `load` command, so when Eclipse calls `load`, the script runs instead.
