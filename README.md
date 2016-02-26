@@ -10,18 +10,22 @@ with native [SEGGER J-Link drivers](https://www.segger.com/jlink-software.html).
 
 #### What's the problem?
 
-Unfortunately, SEGGER still knows nothing about EEPROM programming algorithm for Milandr MCU 1986x series.<br>
+Unfortunately, SEGGER still knows nothing about EEPROM programming algorithm for Milandr MCU 1986x series.
+
 As a result you cannot use the native J-Flash utility. Moreover, you had to use [OpenOCD](http://openocd.org/)
-instead of native drivers for debugging with GNU ARM Eclipse. It's quite good, but at present
-[OpenOCD debugging Eclipse plug-in](http://gnuarmeclipse.github.io/debug/openocd/)
-does not support capturing of Serial Wire Output (SWO).<br>
+instead of native drivers for debugging with GNU ARM Eclipse.
+
+OpenOCD is quite good, but at present, slightly less functional, for example, [OpenOCD debugging Eclipse plug-in]
+(http://gnuarmeclipse.github.io/debug/openocd/)<br>
+does not support capturing of Serial Wire Output (SWO).
+
 Also you are able to use SEGGER [Real Time Transfer](https://www.segger.com/jlink-rtt.html) (RTT)
 only with native drivers.
 
 #### How does it work?
 
-- RAM code (LOADER) implements EEPROM programming algorithm.
-- GDB script on Python (JFlash) redefines the GDB `load` command.
+- RAM code (`LOADER.bin`) implements EEPROM programming algorithm.
+- GDB script on Python (`JFlash.py`) redefines the GDB `load` command.
 
 #### Any limits?
 
