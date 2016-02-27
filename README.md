@@ -2,7 +2,7 @@
 
 #### What's this project for?
 
-- Debugging on [Milandr 32-bit Cortex-М microcontrollers]
+- Debugging on [Milandr 32-bit Cortex-М MCU]
 (http://milandr.ru/en/index.php?mact=Products,cntnt01,default,0&cntnt01hierarchyid=5&cntnt01returnid=141)
 using [GNU ARM Eclipse](http://gnuarmeclipse.github.io/)
 with native [SEGGER J-Link drivers](https://www.segger.com/jlink-software.html).
@@ -13,7 +13,8 @@ with native [SEGGER J-Link drivers](https://www.segger.com/jlink-software.html).
 Unfortunately, SEGGER still knows nothing about EEPROM programming algorithm for Milandr MCU 1986x series.
 
 As a result you cannot use the native J-Flash utility. Moreover, you had to use [OpenOCD](http://openocd.org/)
-instead of native drivers for debugging with GNU ARM Eclipse.
+instead of native drivers<br>
+for debugging with GNU ARM Eclipse.
 
 OpenOCD is quite good, but at present, slightly less functional, for example, [OpenOCD debugging Eclipse plug-in]
 (http://gnuarmeclipse.github.io/debug/openocd/)<br>
