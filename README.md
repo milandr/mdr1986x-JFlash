@@ -46,7 +46,7 @@ JFlash.bat <BIN_FILE>
 The batch file starts J-Link GDB server at first, then runs GDB client with JFlash script
 and the binary file as arguments. Something in this way:
 ```
-start /B JLinkGDBServerCL -if swd -device "Cortex-M3" -endian little -speed 2000 -port 2331 -singlerun -strict
+start /B JLinkGDBServerCL -if swd -device "Cortex-M3" -endian little -speed 2000 -port 2331 -singlerun
 arm-none-eabi-gdb-py --batch -x JFlash.py -ex "py program_from_shell('yourapp.bin')"
 ```
 
@@ -68,4 +68,5 @@ Also, in `GDB SEGGER J-Link Debugging → Startup`, you should select<br>
 ![screenshot](doc/pic/README_02.png)
 
 The `JFlash.py` script redefines GDB `load` command, so when Eclipse calls `load`, the script runs instead.<br>
-The script creates `JFlash.log` in the folder of the current project, also LOADER prints messages into RTT.
+The script creates `JFlash.log` in the folder of the current project, also LOADER prints trace into RTT.<br>
+You can find the actual address of RTT Control Block in `JFlash.py`, see the value of `LD_RTT` variable.
