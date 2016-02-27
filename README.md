@@ -50,7 +50,7 @@ start /B JLinkGDBServerCL -if swd -device "Cortex-M3" -endian little -speed 2000
 arm-none-eabi-gdb-py --batch -x JFlash.py -ex "py program_from_shell('yourapp.bin')"
 ```
 
-#### How to debug under Eclipse
+#### How to debug using GNU ARM Eclipse
 
 - Install [GNU ARM Eclipse](http://gnuarmeclipse.github.io/install/).
 - Configure [J-Link debugging Eclipse plug-in](http://gnuarmeclipse.github.io/debug/jlink/).
