@@ -11,7 +11,7 @@ See the LICENSE file.
 """
 
 APP             = 'JFlash'
-VERSION         = '0.4b2'
+VERSION         = '0.4b3'
 
 #  J-Link GDB Server
 HOST            = 'localhost'
@@ -166,6 +166,7 @@ def program( binary ):
     set_reg( PC , LD_START & ~1 )
     set_mem32( 0xE000E008, 0x20000000 )
     set_mem32( LD_STATE, START )
+    monitor( 'exec SetRTTAddr ' + hex( LD_RTT ))
     monitor( 'go' )
 
     #  Check LOADER is started
