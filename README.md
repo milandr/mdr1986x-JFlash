@@ -70,5 +70,5 @@ Also, in `GDB SEGGER J-Link Debugging → Startup`, you should select<br>
 
 The `JFlash.py` script redefines GDB `load` command, so when Eclipse calls `load`, the script runs instead.
 
-The script creates `JFlash.log` in the folder of the current project, also LOADER prints trace into RTT.<br>
-You can find the actual address of RTT Control Block in `JFlash.py`, see the value of `LD_RTT` variable.
+The script creates `JFlash.log` in the folder of the current project, also LOADER prints trace into RTT,<br>
+just uncomment launch of RTT client in the batch file.
