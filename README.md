@@ -72,3 +72,5 @@ The `JFlash.py` script redefines GDB `load` command, so when Eclipse calls `load
 
 The script creates `JFlash.log` in the folder of the current project, also LOADER prints trace into RTT, just<br>
 uncomment launch of RTT client in the batch file.
+
+At the end `JFlash.py` sets address of RTT structure of our binary if `.map` file exists.
