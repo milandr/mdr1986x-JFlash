@@ -35,12 +35,12 @@ CC = CC_LIST.index( sys.argv[ 1 ].upper())
 
 if CC == 0:
     DIR_BINARY = DIR_ARMCC
-    RE_ADDR    = r"\s+%s\s+(0x[0-9a-fA-F]+)"
-    RE_SIZE    = r"\s+%s\s+0x[0-9a-fA-F]+\s+Data\s+([0-9]+)"
+    RE_ADDR    = r'\s+%s\s+(0x[0-9a-fA-F]+)'
+    RE_SIZE    = r'\s+%s\s+0x[0-9a-fA-F]+\s+Data\s+([0-9]+)'
 else:
     DIR_BINARY = DIR_GCC
-    RE_ADDR    = r"\s+(0x[0-9a-fA-F]+)\s+%s\s*"
-    RE_SIZE    = r"%s\s+(0x[0-9a-fA-F]+)"
+    RE_ADDR    = r'\s+(0x[0-9a-fA-F]+)\s+%s\s*'
+    RE_SIZE    = r'%s\s+(0x[0-9a-fA-F]+)'
 
 RE_LIST = (
     '',
