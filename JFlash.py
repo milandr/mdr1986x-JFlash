@@ -157,7 +157,7 @@ def program( binary ):
 
     log.info( 'Binary file: %s', binary )
     log.info( 'Size: %d', binary_sz )
-    log.info( 'MCU data buffer at %#X', LD_DATA )
+    log.info( 'MCU data buffer at %#x', LD_DATA )
 
     log.info( 'Hello!' )
 
