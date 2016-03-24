@@ -1,10 +1,8 @@
 Archive member included because of file (symbol)
 
-c:/program files (x86)/gnu tools arm embedded/4.9 2015q3/bin/../lib/gcc/arm-none-eabi/4.9.3/../../../../arm-none-eabi/lib/armv7-m\libc.a(lib_a-memcpy.o)
+c:/program files (x86)/gnu tools arm embedded/4.9 2015q3/bin/../lib/gcc/arm-none-eabi/4.9.3/../../../../arm-none-eabi/lib/armv7-m\libc_nano.a(lib_a-memcpy.o)
                               ./source/RTT/SEGGER_RTT.o (memcpy)
-c:/program files (x86)/gnu tools arm embedded/4.9 2015q3/bin/../lib/gcc/arm-none-eabi/4.9.3/../../../../arm-none-eabi/lib/armv7-m\libc.a(lib_a-strcpy.o)
-                              ./source/RTT/SEGGER_RTT.o (strcpy)
-c:/program files (x86)/gnu tools arm embedded/4.9 2015q3/bin/../lib/gcc/arm-none-eabi/4.9.3/../../../../arm-none-eabi/lib/armv7-m\libc.a(lib_a-strlen.o)
+c:/program files (x86)/gnu tools arm embedded/4.9 2015q3/bin/../lib/gcc/arm-none-eabi/4.9.3/../../../../arm-none-eabi/lib/armv7-m\libc_nano.a(lib_a-strlen.o)
                               ./source/RTT/SEGGER_RTT.o (strlen)
 
 Allocating common symbols
@@ -65,14 +63,12 @@ Discarded input sections
  .text          0x00000000        0x0 ./source/LOADER.o
  .data          0x00000000        0x0 ./source/LOADER.o
  .bss           0x00000000        0x0 ./source/LOADER.o
- .data          0x00000000        0x0 c:/program files (x86)/gnu tools arm embedded/4.9 2015q3/bin/../lib/gcc/arm-none-eabi/4.9.3/../../../../arm-none-eabi/lib/armv7-m\libc.a(lib_a-memcpy.o)
- .bss           0x00000000        0x0 c:/program files (x86)/gnu tools arm embedded/4.9 2015q3/bin/../lib/gcc/arm-none-eabi/4.9.3/../../../../arm-none-eabi/lib/armv7-m\libc.a(lib_a-memcpy.o)
- .text          0x00000000        0x0 c:/program files (x86)/gnu tools arm embedded/4.9 2015q3/bin/../lib/gcc/arm-none-eabi/4.9.3/../../../../arm-none-eabi/lib/armv7-m\libc.a(lib_a-strcpy.o)
- .data          0x00000000        0x0 c:/program files (x86)/gnu tools arm embedded/4.9 2015q3/bin/../lib/gcc/arm-none-eabi/4.9.3/../../../../arm-none-eabi/lib/armv7-m\libc.a(lib_a-strcpy.o)
- .bss           0x00000000        0x0 c:/program files (x86)/gnu tools arm embedded/4.9 2015q3/bin/../lib/gcc/arm-none-eabi/4.9.3/../../../../arm-none-eabi/lib/armv7-m\libc.a(lib_a-strcpy.o)
- .text          0x00000000        0x0 c:/program files (x86)/gnu tools arm embedded/4.9 2015q3/bin/../lib/gcc/arm-none-eabi/4.9.3/../../../../arm-none-eabi/lib/armv7-m\libc.a(lib_a-strlen.o)
- .data          0x00000000        0x0 c:/program files (x86)/gnu tools arm embedded/4.9 2015q3/bin/../lib/gcc/arm-none-eabi/4.9.3/../../../../arm-none-eabi/lib/armv7-m\libc.a(lib_a-strlen.o)
- .bss           0x00000000        0x0 c:/program files (x86)/gnu tools arm embedded/4.9 2015q3/bin/../lib/gcc/arm-none-eabi/4.9.3/../../../../arm-none-eabi/lib/armv7-m\libc.a(lib_a-strlen.o)
+ .text          0x00000000        0x0 c:/program files (x86)/gnu tools arm embedded/4.9 2015q3/bin/../lib/gcc/arm-none-eabi/4.9.3/../../../../arm-none-eabi/lib/armv7-m\libc_nano.a(lib_a-memcpy.o)
+ .data          0x00000000        0x0 c:/program files (x86)/gnu tools arm embedded/4.9 2015q3/bin/../lib/gcc/arm-none-eabi/4.9.3/../../../../arm-none-eabi/lib/armv7-m\libc_nano.a(lib_a-memcpy.o)
+ .bss           0x00000000        0x0 c:/program files (x86)/gnu tools arm embedded/4.9 2015q3/bin/../lib/gcc/arm-none-eabi/4.9.3/../../../../arm-none-eabi/lib/armv7-m\libc_nano.a(lib_a-memcpy.o)
+ .text          0x00000000        0x0 c:/program files (x86)/gnu tools arm embedded/4.9 2015q3/bin/../lib/gcc/arm-none-eabi/4.9.3/../../../../arm-none-eabi/lib/armv7-m\libc_nano.a(lib_a-strlen.o)
+ .data          0x00000000        0x0 c:/program files (x86)/gnu tools arm embedded/4.9 2015q3/bin/../lib/gcc/arm-none-eabi/4.9.3/../../../../arm-none-eabi/lib/armv7-m\libc_nano.a(lib_a-strlen.o)
+ .bss           0x00000000        0x0 c:/program files (x86)/gnu tools arm embedded/4.9 2015q3/bin/../lib/gcc/arm-none-eabi/4.9.3/../../../../arm-none-eabi/lib/armv7-m\libc_nano.a(lib_a-strlen.o)
 
 Memory Configuration
 
@@ -91,105 +87,102 @@ LOAD ./source/CMSIS/CM3/DeviceSupport/MDR32F9Qx/startup/system_MDR32F9Qx.o
 LOAD ./source/LOADER.o
 START GROUP
 LOAD c:/program files (x86)/gnu tools arm embedded/4.9 2015q3/bin/../lib/gcc/arm-none-eabi/4.9.3/armv7-m\libgcc.a
-LOAD c:/program files (x86)/gnu tools arm embedded/4.9 2015q3/bin/../lib/gcc/arm-none-eabi/4.9.3/../../../../arm-none-eabi/lib/armv7-m\libc.a
+LOAD c:/program files (x86)/gnu tools arm embedded/4.9 2015q3/bin/../lib/gcc/arm-none-eabi/4.9.3/../../../../arm-none-eabi/lib/armv7-m\libc_nano.a
 END GROUP
 START GROUP
 LOAD c:/program files (x86)/gnu tools arm embedded/4.9 2015q3/bin/../lib/gcc/arm-none-eabi/4.9.3/armv7-m\libgcc.a
-LOAD c:/program files (x86)/gnu tools arm embedded/4.9 2015q3/bin/../lib/gcc/arm-none-eabi/4.9.3/../../../../arm-none-eabi/lib/armv7-m\libc.a
-LOAD c:/program files (x86)/gnu tools arm embedded/4.9 2015q3/bin/../lib/gcc/arm-none-eabi/4.9.3/../../../../arm-none-eabi/lib/armv7-m\libnosys.a
+LOAD c:/program files (x86)/gnu tools arm embedded/4.9 2015q3/bin/../lib/gcc/arm-none-eabi/4.9.3/../../../../arm-none-eabi/lib/armv7-m\libc_nano.a
 END GROUP
 
-.text           0x20000000     0x1309
+.text           0x20000000     0x1135
  *(.isr_vector)
  .isr_vector    0x20000000       0xc0 ./source/CMSIS/CM3/DeviceSupport/MDR32F9Qx/startup/gcc/startup_MDR32F9Qx.o
                 0x20000000                __isr_vector
  *(.text*)
- .text._DoInit  0x200000c0       0x9c ./source/RTT/SEGGER_RTT.o
+ .text._DoInit  0x200000c0       0xa4 ./source/RTT/SEGGER_RTT.o
  .text._WriteBlocking
-                0x2000015c       0xb4 ./source/RTT/SEGGER_RTT.o
+                0x20000164       0xb4 ./source/RTT/SEGGER_RTT.o
  .text._WriteNoCheck
-                0x20000210       0x80 ./source/RTT/SEGGER_RTT.o
+                0x20000218       0x80 ./source/RTT/SEGGER_RTT.o
  .text._GetAvailWriteSpace
-                0x20000290       0x48 ./source/RTT/SEGGER_RTT.o
+                0x20000298       0x48 ./source/RTT/SEGGER_RTT.o
  .text.SEGGER_RTT_WriteNoLock
-                0x200002d8       0x9c ./source/RTT/SEGGER_RTT.o
-                0x200002d8                SEGGER_RTT_WriteNoLock
+                0x200002e0       0x9c ./source/RTT/SEGGER_RTT.o
+                0x200002e0                SEGGER_RTT_WriteNoLock
  .text.SEGGER_RTT_Write
-                0x20000374       0x48 ./source/RTT/SEGGER_RTT.o
-                0x20000374                SEGGER_RTT_Write
+                0x2000037c       0x48 ./source/RTT/SEGGER_RTT.o
+                0x2000037c                SEGGER_RTT_Write
  .text.SEGGER_RTT_WriteString
-                0x200003bc       0x28 ./source/RTT/SEGGER_RTT.o
-                0x200003bc                SEGGER_RTT_WriteString
+                0x200003c4       0x28 ./source/RTT/SEGGER_RTT.o
+                0x200003c4                SEGGER_RTT_WriteString
  .text.SEGGER_RTT_ConfigUpBuffer
-                0x200003e4       0xd4 ./source/RTT/SEGGER_RTT.o
-                0x200003e4                SEGGER_RTT_ConfigUpBuffer
+                0x200003ec       0xd4 ./source/RTT/SEGGER_RTT.o
+                0x200003ec                SEGGER_RTT_ConfigUpBuffer
  .text._StoreChar
-                0x200004b8       0x80 ./source/RTT/SEGGER_RTT_printf.o
+                0x200004c0       0x80 ./source/RTT/SEGGER_RTT_printf.o
  .text._PrintUnsigned
-                0x20000538      0x154 ./source/RTT/SEGGER_RTT_printf.o
+                0x20000540      0x154 ./source/RTT/SEGGER_RTT_printf.o
  .text._PrintInt
-                0x2000068c      0x14c ./source/RTT/SEGGER_RTT_printf.o
+                0x20000694      0x14c ./source/RTT/SEGGER_RTT_printf.o
  .text.SEGGER_RTT_vprintf
-                0x200007d8      0x334 ./source/RTT/SEGGER_RTT_printf.o
-                0x200007d8                SEGGER_RTT_vprintf
+                0x200007e0      0x334 ./source/RTT/SEGGER_RTT_printf.o
+                0x200007e0                SEGGER_RTT_vprintf
  .text.SEGGER_RTT_printf
-                0x20000b0c       0x30 ./source/RTT/SEGGER_RTT_printf.o
-                0x20000b0c                SEGGER_RTT_printf
- .text          0x20000b3c       0x44 ./source/CMSIS/CM3/DeviceSupport/MDR32F9Qx/startup/gcc/startup_MDR32F9Qx.o
-                0x20000b3c                Reset_Handler
-                0x20000b7c                HardFault_Handler
-                0x20000b7c                SysTick_Handler
-                0x20000b7c                EXT_INT1_IRQHandler
-                0x20000b7c                PendSV_Handler
-                0x20000b7c                NMI_Handler
-                0x20000b7c                UART1_IRQHandler
-                0x20000b7c                CAN1_IRQHandler
-                0x20000b7c                COMPARATOR_IRQHandler
-                0x20000b7c                POWER_IRQHandler
-                0x20000b7c                UsageFault_Handler
-                0x20000b7c                Timer3_IRQHandler
-                0x20000b7c                BACKUP_IRQHandler
-                0x20000b7c                DebugMon_Handler
-                0x20000b7c                UART2_IRQHandler
-                0x20000b7c                Timer2_IRQHandler
-                0x20000b7c                EXT_INT2_IRQHandler
-                0x20000b7c                Default_Handler
-                0x20000b7c                ADC_IRQHandler
-                0x20000b7c                SSP1_IRQHandler
-                0x20000b7c                USB_IRQHandler
-                0x20000b7c                Timer1_IRQHandler
-                0x20000b7c                EXT_INT3_IRQHandler
-                0x20000b7c                I2C_IRQHandler
-                0x20000b7c                MemManage_Handler
-                0x20000b7c                EXT_INT4_IRQHandler
-                0x20000b7c                SVC_Handler
-                0x20000b7c                WWDG_IRQHandler
-                0x20000b7c                SSP2_IRQHandler
-                0x20000b7c                DMA_IRQHandler
-                0x20000b7c                CAN2_IRQHandler
-                0x20000b7c                BusFault_Handler
+                0x20000b14       0x30 ./source/RTT/SEGGER_RTT_printf.o
+                0x20000b14                SEGGER_RTT_printf
+ .text          0x20000b44       0x44 ./source/CMSIS/CM3/DeviceSupport/MDR32F9Qx/startup/gcc/startup_MDR32F9Qx.o
+                0x20000b44                Reset_Handler
+                0x20000b84                HardFault_Handler
+                0x20000b84                SysTick_Handler
+                0x20000b84                EXT_INT1_IRQHandler
+                0x20000b84                PendSV_Handler
+                0x20000b84                NMI_Handler
+                0x20000b84                UART1_IRQHandler
+                0x20000b84                CAN1_IRQHandler
+                0x20000b84                COMPARATOR_IRQHandler
+                0x20000b84                POWER_IRQHandler
+                0x20000b84                UsageFault_Handler
+                0x20000b84                Timer3_IRQHandler
+                0x20000b84                BACKUP_IRQHandler
+                0x20000b84                DebugMon_Handler
+                0x20000b84                UART2_IRQHandler
+                0x20000b84                Timer2_IRQHandler
+                0x20000b84                EXT_INT2_IRQHandler
+                0x20000b84                Default_Handler
+                0x20000b84                ADC_IRQHandler
+                0x20000b84                SSP1_IRQHandler
+                0x20000b84                USB_IRQHandler
+                0x20000b84                Timer1_IRQHandler
+                0x20000b84                EXT_INT3_IRQHandler
+                0x20000b84                I2C_IRQHandler
+                0x20000b84                MemManage_Handler
+                0x20000b84                EXT_INT4_IRQHandler
+                0x20000b84                SVC_Handler
+                0x20000b84                WWDG_IRQHandler
+                0x20000b84                SSP2_IRQHandler
+                0x20000b84                DMA_IRQHandler
+                0x20000b84                CAN2_IRQHandler
+                0x20000b84                BusFault_Handler
  .text.SystemCoreClockUpdate
-                0x20000b80       0xd0 ./source/CMSIS/CM3/DeviceSupport/MDR32F9Qx/startup/system_MDR32F9Qx.o
-                0x20000b80                SystemCoreClockUpdate
+                0x20000b88       0xd0 ./source/CMSIS/CM3/DeviceSupport/MDR32F9Qx/startup/system_MDR32F9Qx.o
+                0x20000b88                SystemCoreClockUpdate
  .text.SystemInit
-                0x20000c50       0x70 ./source/CMSIS/CM3/DeviceSupport/MDR32F9Qx/startup/system_MDR32F9Qx.o
-                0x20000c50                SystemInit
- .text.usleep   0x20000cc0       0x44 ./source/LOADER.o
-                0x20000cc0                usleep
+                0x20000c58       0x70 ./source/CMSIS/CM3/DeviceSupport/MDR32F9Qx/startup/system_MDR32F9Qx.o
+                0x20000c58                SystemInit
+ .text.usleep   0x20000cc8       0x44 ./source/LOADER.o
+                0x20000cc8                usleep
  .text.eeprom_erase
-                0x20000d04       0xc0 ./source/LOADER.o
-                0x20000d04                eeprom_erase
+                0x20000d0c       0xc0 ./source/LOADER.o
+                0x20000d0c                eeprom_erase
  .text.eeprom_write_block
-                0x20000dc4      0x160 ./source/LOADER.o
-                0x20000dc4                eeprom_write_block
- .text.main     0x20000f24       0xec ./source/LOADER.o
-                0x20000f24                main
- .text          0x20001010       0xec c:/program files (x86)/gnu tools arm embedded/4.9 2015q3/bin/../lib/gcc/arm-none-eabi/4.9.3/../../../../arm-none-eabi/lib/armv7-m\libc.a(lib_a-memcpy.o)
-                0x20001010                memcpy
- .text.strcpy   0x200010fc       0xbc c:/program files (x86)/gnu tools arm embedded/4.9 2015q3/bin/../lib/gcc/arm-none-eabi/4.9.3/../../../../arm-none-eabi/lib/armv7-m\libc.a(lib_a-strcpy.o)
-                0x200010fc                strcpy
- .text.strlen   0x200011b8       0x5c c:/program files (x86)/gnu tools arm embedded/4.9 2015q3/bin/../lib/gcc/arm-none-eabi/4.9.3/../../../../arm-none-eabi/lib/armv7-m\libc.a(lib_a-strlen.o)
-                0x200011b8                strlen
+                0x20000dcc      0x160 ./source/LOADER.o
+                0x20000dcc                eeprom_write_block
+ .text.main     0x20000f2c       0xec ./source/LOADER.o
+                0x20000f2c                main
+ .text.memcpy   0x20001018       0x16 c:/program files (x86)/gnu tools arm embedded/4.9 2015q3/bin/../lib/gcc/arm-none-eabi/4.9.3/../../../../arm-none-eabi/lib/armv7-m\libc_nano.a(lib_a-memcpy.o)
+                0x20001018                memcpy
+ .text.strlen   0x2000102e       0x10 c:/program files (x86)/gnu tools arm embedded/4.9 2015q3/bin/../lib/gcc/arm-none-eabi/4.9.3/../../../../arm-none-eabi/lib/armv7-m\libc_nano.a(lib_a-strlen.o)
+                0x2000102e                strlen
  *(.init)
  *(.fini)
  *crtbegin.o(.ctors)
@@ -203,41 +196,42 @@ END GROUP
  *(SORT(.dtors.*))
  *(.dtors)
  *(.rodata*)
- .rodata        0x20001214       0x17 ./source/RTT/SEGGER_RTT.o
- *fill*         0x2000122b        0x1 
- .rodata._aV2C.4341
-                0x2000122c       0x10 ./source/RTT/SEGGER_RTT_printf.o
- .rodata        0x2000123c       0xcd ./source/LOADER.o
+ *fill*         0x2000103e        0x2 
+ .rodata        0x20001040       0x17 ./source/RTT/SEGGER_RTT.o
+ *fill*         0x20001057        0x1 
+ .rodata._aV2C.4789
+                0x20001058       0x10 ./source/RTT/SEGGER_RTT_printf.o
+ .rodata        0x20001068       0xcd ./source/LOADER.o
  *(.eh_frame*)
 
-.glue_7         0x2000130c        0x0
+.glue_7         0x20001138        0x0
  .glue_7        0x00000000        0x0 linker stubs
 
-.glue_7t        0x2000130c        0x0
+.glue_7t        0x20001138        0x0
  .glue_7t       0x00000000        0x0 linker stubs
 
-.vfp11_veneer   0x2000130c        0x0
+.vfp11_veneer   0x20001138        0x0
  .vfp11_veneer  0x00000000        0x0 linker stubs
 
-.v4_bx          0x2000130c        0x0
+.v4_bx          0x20001138        0x0
  .v4_bx         0x00000000        0x0 linker stubs
 
-.iplt           0x2000130c        0x0
+.iplt           0x20001138        0x0
  .iplt          0x00000000        0x0 ./source/RTT/SEGGER_RTT.o
 
-.rel.dyn        0x2000130c        0x0
+.rel.dyn        0x20001138        0x0
  .rel.iplt      0x00000000        0x0 ./source/RTT/SEGGER_RTT.o
 
 .ARM.extab
  *(.ARM.extab* .gnu.linkonce.armextab.*)
-                0x2000130c                __exidx_start = .
+                0x20001138                __exidx_start = .
 
 .ARM.exidx
  *(.ARM.exidx* .gnu.linkonce.armexidx.*)
-                0x2000130c                __exidx_end = .
-                0x2000130c                __etext = .
+                0x20001138                __exidx_end = .
+                0x20001138                __etext = .
 
-.data           0x20002000        0x4 load address 0x20001309
+.data           0x20002000        0x4 load address 0x20001135
                 0x20002000                __data_start__ = .
  *(.ramfunc*)
                 0x20002000                . = ALIGN (0x4)
@@ -264,10 +258,10 @@ END GROUP
                 0x20002004                . = ALIGN (0x4)
                 0x20002004                __data_end__ = .
 
-.igot.plt       0x20002004        0x0 load address 0x20001310
+.igot.plt       0x20002004        0x0 load address 0x2000113c
  .igot.plt      0x00000000        0x0 ./source/RTT/SEGGER_RTT.o
 
-.bss            0x20002004     0x4498 load address 0x20001310
+.bss            0x20002004     0x4498 load address 0x2000113c
                 0x20002004                . = ALIGN (0x4)
                 0x20002004                __bss_start__ = .
  *(.bss*)
@@ -319,12 +313,10 @@ OUTPUT(LOADER.elf elf32-littlearm)
  .ARM.attributes
                 0x000000b4       0x33 ./source/LOADER.o
  .ARM.attributes
-                0x000000e7       0x1b c:/program files (x86)/gnu tools arm embedded/4.9 2015q3/bin/../lib/gcc/arm-none-eabi/4.9.3/../../../../arm-none-eabi/lib/armv7-m\libc.a(lib_a-memcpy.o)
+                0x000000e7       0x2d c:/program files (x86)/gnu tools arm embedded/4.9 2015q3/bin/../lib/gcc/arm-none-eabi/4.9.3/../../../../arm-none-eabi/lib/armv7-m\libc_nano.a(lib_a-memcpy.o)
  .ARM.attributes
-                0x00000102       0x2d c:/program files (x86)/gnu tools arm embedded/4.9 2015q3/bin/../lib/gcc/arm-none-eabi/4.9.3/../../../../arm-none-eabi/lib/armv7-m\libc.a(lib_a-strcpy.o)
- .ARM.attributes
-                0x0000012f       0x2d c:/program files (x86)/gnu tools arm embedded/4.9 2015q3/bin/../lib/gcc/arm-none-eabi/4.9.3/../../../../arm-none-eabi/lib/armv7-m\libc.a(lib_a-strlen.o)
+                0x00000114       0x2d c:/program files (x86)/gnu tools arm embedded/4.9 2015q3/bin/../lib/gcc/arm-none-eabi/4.9.3/../../../../arm-none-eabi/lib/armv7-m\libc_nano.a(lib_a-strlen.o)
 
-.debug_frame    0x00000000       0x40
- .debug_frame   0x00000000       0x20 c:/program files (x86)/gnu tools arm embedded/4.9 2015q3/bin/../lib/gcc/arm-none-eabi/4.9.3/../../../../arm-none-eabi/lib/armv7-m\libc.a(lib_a-strcpy.o)
- .debug_frame   0x00000020       0x20 c:/program files (x86)/gnu tools arm embedded/4.9 2015q3/bin/../lib/gcc/arm-none-eabi/4.9.3/../../../../arm-none-eabi/lib/armv7-m\libc.a(lib_a-strlen.o)
+.debug_frame    0x00000000       0x48
+ .debug_frame   0x00000000       0x28 c:/program files (x86)/gnu tools arm embedded/4.9 2015q3/bin/../lib/gcc/arm-none-eabi/4.9.3/../../../../arm-none-eabi/lib/armv7-m\libc_nano.a(lib_a-memcpy.o)
+ .debug_frame   0x00000028       0x20 c:/program files (x86)/gnu tools arm embedded/4.9 2015q3/bin/../lib/gcc/arm-none-eabi/4.9.3/../../../../arm-none-eabi/lib/armv7-m\libc_nano.a(lib_a-strlen.o)
