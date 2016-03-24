@@ -59,6 +59,7 @@ import os
 import logging
 from time import sleep
 import filecmp
+import re
 
 #  Logging
 LOG             = APP + '.log'
@@ -117,6 +118,18 @@ def load_binary( fn, offset, start=None, end=None ):
 def dump_binary( fn, offset, l ):
     return execute( 'dump binary memory %s %d %d' % ( fn, offset, offset + l ))
 
+#  Set taken from MAP file address of SEGGER_RTT structure
+def set_RTT( fn ):
+    fn_map = os.path.splitext( fn )[ 0 ] + '.map'
+    if os.path.exists( fn_map ):
+        for ln in open( fn_map ).readlines():
+            m = re.match( r'\s+(0x[0-9a-fA-F]+)\s+_SEGGER_RTT\s*', ln )
+            if m:
+                RTT = m.group( 1 )
+                log.info( 'RTT structure at %s', RTT )
+                monitor( 'exec SetRTTAddr ' + RTT )
+                break
+
 #  Directory of script
 SCRIPT_DIR = os.path.dirname( os.path.realpath( __file__ ))
 
@@ -154,6 +167,7 @@ def program( binary ):
     if verify( binary, binary_sz ):
         log.info( 'Binary file exactly matches with EEPROM content.' )
 
+        set_RTT( binary )
         monitor( 'go' )
         return True
 
@@ -241,6 +255,7 @@ def program( binary ):
 
     log.info( '**** SUCCESS! ****' )
 
+    set_RTT( binary )
     monitor( 'go' )
     fb = monitor( 'reset 0' )
     log.info( fb.strip())
