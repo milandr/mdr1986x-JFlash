@@ -53,6 +53,8 @@ ERR_ADDR_END    = 3
 RAM_START       = 0x20000000
 EEPROM_START    = 0x08000000
 
+RE_RTT_ADDR     = r'\s+(0x[0-9a-fA-F]+)\s+_SEGGER_RTT\s*'
+
 import gdb
 import sys
 import os
@@ -122,8 +124,9 @@ def dump_binary( fn, offset, l ):
 def set_RTT( fn ):
     fn_map = os.path.splitext( fn )[ 0 ] + '.map'
     if os.path.exists( fn_map ):
+        regex = re.compile( RE_RTT_ADDR )
         for ln in open( fn_map ).readlines():
-            m = re.match( r'\s+(0x[0-9a-fA-F]+)\s+_SEGGER_RTT\s*', ln )
+            m = regex.match( ln )
             if m:
                 RTT = m.group( 1 )
                 log.info( 'RTT structure at %s', RTT )
