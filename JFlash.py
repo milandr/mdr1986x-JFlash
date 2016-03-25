@@ -11,7 +11,7 @@ See the LICENSE file.
 """
 
 APP             = 'JFlash'
-VERSION         = '0.5'
+VERSION         = '0.5.1'
 
 #  J-Link GDB Server
 HOST            = 'localhost'
@@ -131,7 +131,8 @@ def set_RTT( fn ):
                 RTT = m.group( 1 )
                 log.info( 'RTT structure at %s', RTT )
                 monitor( 'exec SetRTTAddr ' + RTT )
-                break
+                return True
+    return False
 
 #  Directory of script
 SCRIPT_DIR = os.path.dirname( os.path.realpath( __file__ ))
@@ -259,7 +260,6 @@ def program( binary ):
     log.info( '**** SUCCESS! ****' )
 
     set_RTT( binary )
-    monitor( 'go' )
     fb = monitor( 'reset 0' )
     log.info( fb.strip())
 
@@ -302,6 +302,8 @@ def program_from_shell( binary ):
         return False
 
     result = program( binary )
+    if result:
+        monitor( 'go' )
 
     log.removeHandler( h )
     return result
