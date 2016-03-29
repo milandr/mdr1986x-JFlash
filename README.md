@@ -35,7 +35,7 @@ It hasn't been tested on Linux yet...
 
 #### How to program EEPROM using GNU toolchain
 
-- Install [SEGGER J-Link Software](https://www.segger.com/jlink-software.html) (tested with `5.10o`).
+- Install [SEGGER J-Link Software](https://www.segger.com/jlink-software.html) (tested with `5.10`).
 - Install [GNU toolchain](https://launchpad.net/gcc-arm-embedded) (tested with `4.9-2015-q3`).
 - Install Python 2.7 and set `PYTHON_PATH` and `PYTHON_LIB` environment variables.
 - You may need to configure `PATH` environment variable.
