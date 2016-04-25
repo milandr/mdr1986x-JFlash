@@ -11,7 +11,7 @@ See the LICENSE file.
 """
 
 APP             = 'JFlash'
-VERSION         = '0.5.1'
+VERSION         = '0.5.2'
 
 #  J-Link GDB Server
 HOST            = 'localhost'
@@ -172,7 +172,6 @@ def program( binary ):
         log.info( 'Binary file exactly matches with EEPROM content.' )
 
         set_RTT( binary )
-        monitor( 'go' )
         return True
 
     #  START LOADER
@@ -262,6 +261,7 @@ def program( binary ):
     set_RTT( binary )
     fb = monitor( 'reset 0' )
     log.info( fb.strip())
+    monitor( 'halt' )
 
     return True
 
