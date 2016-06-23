@@ -11,7 +11,7 @@ See the LICENSE file.
 """
 
 APP             = 'JFlash'
-VERSION         = '0.5.2'
+VERSION         = '0.6'
 
 #  J-Link GDB Server
 HOST            = 'localhost'
@@ -25,7 +25,7 @@ DUMP            = 'dump.bin'
 LD_COMPILER     = 1
 LD_START        = 0x20000b44
 LD_STACK        = 0x20008000
-LD_IFACE        = 0x2000248c
+LD_IFACE        = 0x2000245c
 LD_IFACE_SZ     = 0x4010
 LD_RTT          = 0x20002414
 
@@ -91,11 +91,11 @@ def execute( st ):
 def monitor( st ):
     return execute( 'monitor ' + st )
 
-#  Read DWORD for memory
+#  Read DWORD (32 bit) for memory
 def mem32( addr ):
     return long( execute( 'x ' + str( addr )).split( ':' )[ 1 ].strip(), 16 )
 
-#  Write DWORD to memory
+#  Write DWORD (32 bit) to memory
 def set_mem32( addr, val ):
     return execute( 'set {int}%d = %d' % ( addr, val ))
 
@@ -207,7 +207,7 @@ def program( binary ):
     sleep( 0.2 )
     monitor( 'halt' )
 
-    #  Check very first DWORD
+    #  Check very first DWORD (32 bit)
     if mem32( EEPROM_START ) != 0xFFFFFFFF:
         log.error( 'EEPROM is not empty.' )
         return False
@@ -231,7 +231,7 @@ def program( binary ):
         log.debug( fb.strip())
 
         set_mem32( LD_ADDR, EEPROM_START + start )
-        set_mem32( LD_LEN, ( sz + 3 ) // 4 )  # size in DWORDs
+        set_mem32( LD_LEN, ( sz + 3 ) // 4 )  # size in EEPROM_WORD (32 bit)
         set_mem32( LD_STATE, WRITE_BLOCK )
 
         monitor( 'go' )

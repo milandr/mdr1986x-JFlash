@@ -113,6 +113,7 @@ SECTIONS
 	} > RAMX
 	*/
 
+	. = ALIGN(4);
 	__etext = .;
 
 	.data : AT (__etext)

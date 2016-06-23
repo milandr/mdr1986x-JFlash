@@ -41,13 +41,13 @@
 *                                                                    *
 **********************************************************************
 *                                                                    *
-*       RTT version: 5.10h                                           *
+*       RTT version: 5.10u                                           *
 *                                                                    *
 **********************************************************************
 ----------------------------------------------------------------------
 File    : SEGGER_RTT_Conf.h
-Purpose : Implementation of SEGGER real-time transfer (RTT) which 
-          allows real-time communication on targets which support 
+Purpose : Implementation of SEGGER real-time transfer (RTT) which
+          allows real-time communication on targets which support
           debugger memory accesses while the CPU is running.
 ---------------------------END-OF-HEADER------------------------------
 */
@@ -66,8 +66,8 @@ Purpose : Implementation of SEGGER real-time transfer (RTT) which
 **********************************************************************
 */
 
-#define SEGGER_RTT_MAX_NUM_UP_BUFFERS             (2)     // Max. number of up-buffers (T->H) available on this target    (Default: 2)
-#define SEGGER_RTT_MAX_NUM_DOWN_BUFFERS           (2)     // Max. number of down-buffers (H->T) available on this target  (Default: 2)
+#define SEGGER_RTT_MAX_NUM_UP_BUFFERS             (1)     // Max. number of up-buffers (T->H) available on this target    (Default: 2)
+#define SEGGER_RTT_MAX_NUM_DOWN_BUFFERS           (1)     // Max. number of down-buffers (H->T) available on this target  (Default: 2)
 
 #define BUFFER_SIZE_UP                            (1024)  // Size of the buffer for terminal output of target, up to host (Default: 1k)
 #define BUFFER_SIZE_DOWN                          (16)    // Size of the buffer for terminal input to target from host (Usually keyboard input) (Default: 16)
@@ -83,7 +83,7 @@ Purpose : Implementation of SEGGER real-time transfer (RTT) which
 //
 /*********************************************************************
 *
-*       RTT lock configuration for SEGGER Embedded Studio, 
+*       RTT lock configuration for SEGGER Embedded Studio,
 *       Rowley CrossStudio and GCC
 */
 #if (defined __SES_ARM) || (defined __CROSSWORKS_ARM) || (defined __GNUC__)
@@ -96,15 +96,15 @@ Purpose : Implementation of SEGGER real-time transfer (RTT) which
                                                   : "=r" (LockState)            \
                                                   :                             \
                                                   : "r1"                        \
-                                                  );                            
-    
+                                                  );
+
     #define SEGGER_RTT_UNLOCK()   __asm volatile ("msr   primask, %0  \n\t"     \
                                                   :                             \
                                                   : "r" (LockState)             \
                                                   :                             \
                                                   );                            \
-                                  }                                             
-                                  
+                                  }
+
   #elif (defined(__ARM_ARCH_7M__) || defined(__ARM_ARCH_7EM__))
     #define SEGGER_RTT_LOCK() {                                                 \
                                     unsigned int LockState;                     \
@@ -114,8 +114,8 @@ Purpose : Implementation of SEGGER real-time transfer (RTT) which
                                                   : "=r" (LockState)            \
                                                   :                             \
                                                   : "r1"                        \
-                                                  );                            
-    
+                                                  );
+
     #define SEGGER_RTT_UNLOCK()   __asm volatile ("msr   basepri, %0  \n\t"     \
                                                   :                             \
                                                   : "r" (LockState)             \
@@ -123,7 +123,7 @@ Purpose : Implementation of SEGGER real-time transfer (RTT) which
                                                   );                            \
                                   }
   #else
-    #define SEGGER_RTT_LOCK()  
+    #define SEGGER_RTT_LOCK()
     #define SEGGER_RTT_UNLOCK()
   #endif
 #endif
@@ -137,18 +137,18 @@ Purpose : Implementation of SEGGER real-time transfer (RTT) which
     #define SEGGER_RTT_LOCK() {                                                 \
                                     unsigned int LockState;                     \
                                     LockState = __get_PRIMASK();                \
-                                    __set_PRIMASK(1);                           
-                                    
+                                    __set_PRIMASK(1);
+
     #define SEGGER_RTT_UNLOCK() __set_PRIMASK(LockState);                       \
                                   }
   #elif ((defined (__ARM7EM__) && (__CORE__ == __ARM7EM__)) || (defined (__ARM7M__) && (__CORE__ == __ARM7M__)))
     #define SEGGER_RTT_LOCK() {                                                 \
                                     unsigned int LockState;                     \
                                     LockState = __get_BASEPRI();                \
-                                    __set_BASEPRI(128);                           
-                                    
+                                    __set_BASEPRI(128);
+
     #define SEGGER_RTT_UNLOCK() __set_BASEPRI(LockState);                       \
-                                  }  
+                                  }
   #endif
 #endif
 

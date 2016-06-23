@@ -3,7 +3,7 @@
   * @file    system_MDR32F9Qx.c
   * @author  Phyton Application Team
   * @version V1.4.0
-  * @date    10/28/2011
+  * @date    11/06/2010
   * @brief   CMSIS Cortex-M3 Device Peripheral Access Layer System Source File.
   ******************************************************************************
   * <br><br>
@@ -99,6 +99,7 @@ void SystemCoreClockUpdate (void)
   /*Select CPU_CLK from HSI, CPU_C3, LSE, LSI cases */
   switch ((MDR_RST_CLK->CPU_CLOCK >> 8) & (uint32_t)0x03)
   {
+    uint32_t tmp;
     case 0 :
       /* HSI */
       SystemCoreClock = HSI_Value;
@@ -106,13 +107,15 @@ void SystemCoreClockUpdate (void)
     case 1 :
       /* CPU_C3 */
       /* Determine CPU_C3 frequency */
-      if ((MDR_RST_CLK->CPU_CLOCK >> 4 & (uint32_t)0x08) == 0)
+      tmp = MDR_RST_CLK->CPU_CLOCK >> 4 & (uint32_t)0x0F;
+      if (tmp & (uint32_t)0x8)
       {
-        cpu_c3_freq = cpu_c2_freq;
+        tmp &= (uint32_t)0x7;
+        cpu_c3_freq = cpu_c2_freq / ((uint32_t)2 << tmp);
       }
       else
       {
-        cpu_c3_freq = cpu_c2_freq >> ((MDR_RST_CLK->CPU_CLOCK >> 4 & (uint32_t)0x07) + 1);
+        cpu_c3_freq = cpu_c2_freq;
       }
       SystemCoreClock = cpu_c3_freq;
       break;
@@ -138,22 +141,25 @@ void SystemCoreClockUpdate (void)
 void SystemInit (void)
 {
   /* Reset the RST clock configuration to the default reset state */
+  SCB->VTOR = 0x08000000;
 
   /* Reset all clock but RST_CLK & BKP_CLC bits */
-  MDR_RST_CLK->PER_CLOCK      = (uint32_t)0x8000010;
+  MDR_RST_CLK->PER_CLOCK   = (uint32_t)0x8000010;
 
-  /* Reset REG_0F bits to zero but HSION & LSION bits */
-  MDR_BKP->REG_0F |= ((BKP_REG_0F_HSI_ON) |
-                      (BKP_REG_0F_LSI_ON) );
-  MDR_BKP->REG_0F &= ((BKP_REG_0F_HSI_ON) |
-                      (BKP_REG_0F_LSI_ON) );
+  /* Reset CPU_CLOCK bits */
+  MDR_RST_CLK->CPU_CLOCK   &= (uint32_t)0x00000000;
 
-  MDR_RST_CLK->CPU_CLOCK     &= (uint32_t)0x00000000;    /* Reset CPU_CLOCK bits        */
-  MDR_RST_CLK->PLL_CONTROL   &= (uint32_t)0x00000000;    /* Reset PLL_CONTROL bits      */
-  MDR_RST_CLK->HS_CONTROL    &= (uint32_t)0x00000000;    /* Reset HSEON and HSEBYP bits */
-  MDR_RST_CLK->USB_CLOCK     &= (uint32_t)0x00000000;    /* Reset USB_CLOCK bits        */
-  MDR_RST_CLK->ADC_MCO_CLOCK &= (uint32_t)0x00000000;    /* Reset ADC_MCO_CLOCK bits    */
-  MDR_RST_CLK->RTC_CLOCK     &= (uint32_t)0x00000000;    /* Reset RTC_CLOCK bits        */
+  /* Reset PLL_CONTROL bits */
+  MDR_RST_CLK->PLL_CONTROL &= (uint32_t)0x00000000;
+
+  /* Reset HSEON and HSEBYP bits */
+  MDR_RST_CLK->HS_CONTROL  &= (uint32_t)0x00000000;
+
+  /* Reset USB_CLOCK bits */
+  MDR_RST_CLK->USB_CLOCK   &= (uint32_t)0x00000000;
+
+  /* Reset ADC_MCO_CLOCK bits */
+  MDR_RST_CLK->ADC_MCO_CLOCK   &= (uint32_t)0x00000000;
 
   SystemCoreClockUpdate();
 }
