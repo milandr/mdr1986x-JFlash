@@ -11,7 +11,7 @@ See the LICENSE file.
 """
 
 APP             = 'JFlash'
-VERSION         = '0.6'
+VERSION         = '0.6.1'
 
 #  J-Link GDB Server
 HOST            = 'localhost'
@@ -62,6 +62,7 @@ import logging
 from time import sleep
 import filecmp
 import re
+import binascii
 
 #  Logging
 LOG             = APP + '.log'
@@ -134,7 +135,16 @@ def set_RTT( fn ):
                 return True
     return False
 
-#  Directory of script
+#  Calculate CRC-32 of file
+def calc_crc32( fn ):
+    with open( fn, 'rb' ) as f:
+        return ( binascii.crc32( f.read()) & 0xFFFFFFFF )
+
+#  Align a number
+def aligned( val, align ):
+    return (( val + align - 1 ) // align * align )
+
+#  Directory of the script
 SCRIPT_DIR = os.path.dirname( os.path.realpath( __file__ ))
 
 #  Verify EEPROM
@@ -155,9 +165,11 @@ def program( binary ):
         return False
 
     binary_sz = os.path.getsize( binary )
+    crc32 = calc_crc32( binary )
 
     log.info( 'Binary file: %s', binary )
     log.info( 'Size: %d', binary_sz )
+    log.info( 'CRC-32: %#08x', crc32 )
     log.info( 'MCU data buffer at %#x', LD_DATA )
 
     log.info( 'Hello!' )
@@ -231,7 +243,7 @@ def program( binary ):
         log.debug( fb.strip())
 
         set_mem32( LD_ADDR, EEPROM_START + start )
-        set_mem32( LD_LEN, ( sz + 3 ) // 4 )  # size in EEPROM_WORD (32 bit)
+        set_mem32( LD_LEN, aligned( sz, 4 ) // 4 )  # size in EEPROM_WORD (32 bit)
         set_mem32( LD_STATE, WRITE_BLOCK )
 
         monitor( 'go' )
@@ -256,19 +268,52 @@ def program( binary ):
         log.error( 'Binary file does NOT match with EEPROM content.' )
         return False
 
-    log.info( '**** SUCCESS! ****' )
+    #  WRITE CRC-32 OF BINARY FILE RIGHT AFTER THE IMAGE
+
+    log.info( 'CRC-32 writing...' )
+    crc32_addr = EEPROM_START + aligned( binary_sz, 4 )
+
+    set_mem32( LD_DATA, crc32 )
+    set_mem32( LD_ADDR, crc32_addr )
+    set_mem32( LD_LEN, 1 )  # size in EEPROM_WORD (32 bit)
+    set_mem32( LD_STATE, WRITE_BLOCK )
+
+    monitor( 'go' )
+
+    sleep( 0.1 )
+    #  Wait for ending
+    while mem32( LD_STATE ) == WRITE_BLOCK:
+        sleep( 0.2 )
+
+    monitor( 'halt' )
+
+    #  Check error
+    if mem32( LD_ERR ) != ERR_NONE:
+        log.error( 'Fail to write CRC-32 (E%d).', mem32( LD_ERR ))
+        return False
 
     set_RTT( binary )
     fb = monitor( 'reset 0' )
     log.info( fb.strip())
     monitor( 'halt' )
 
+    #  BUG!? There is a strong probability that we will get 0xFFFFFFFF
+    #  if we read the same word we just wrote to EEPROM.
+    #  So, we will check written CRC-32 after MCU reset...
+
+    #  Verify written CRC-32
+    if mem32( crc32_addr ) != crc32:
+        log.error( 'CRC-32 does NOT match with written value.' )
+        return False
+
+    log.info( '**** SUCCESS! ****' )
+
     return True
 
 
 #  Wrapper for program EEPROM from Eclipce
 def program_from_eclipse( binary ):
-    #  Write log to file
+    #  Output log to file
     h = logging.FileHandler( LOG, mode = 'w' )
     h.setFormatter( logging.Formatter( LOG_FORMAT, LOG_TIME ))
     log.addHandler( h )
@@ -284,7 +329,7 @@ def program_from_eclipse( binary ):
 
 #  Wrapper for program EEPROM from shell
 def program_from_shell( binary ):
-    #  Write log to stdout
+    #  Output log to stdout
     h = logging.StreamHandler( sys.stdout )
     h.setFormatter( logging.Formatter( LOG_FORMAT, LOG_TIME ))
     log.addHandler( h )
