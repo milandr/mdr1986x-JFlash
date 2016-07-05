@@ -35,7 +35,7 @@ It hasn't been tested on Linux yet...
 
 #### How to program EEPROM using GNU toolchain
 
-- Install [SEGGER J-Link Software](https://www.segger.com/jlink-software.html) (tested with `5.10`).
+- Install [SEGGER J-Link Software](https://www.segger.com/jlink-software.html) (tested with `5.10`-`5.12`).
 - Install [GNU toolchain](https://launchpad.net/gcc-arm-embedded) (tested with `4.9-2015-q3`).
 - Install Python 2.7 and set `PYTHON_PATH` and `PYTHON_LIB` environment variables.
 - You may need to configure `PATH` environment variable.
@@ -64,7 +64,8 @@ In the debugger launch configuration `GDB SEGGER J-Link Debugging → Debugger`,
 ![screenshot](doc/pic/README_01.png)
 
 Also, in `GDB SEGGER J-Link Debugging → Startup`, you should select<br>
-`Load Symbols and Executable → Load Executable → Use file:`, and add the name of binary file.
+`Load Symbols and Executable → Load Executable → Use file:`, and add the name of
+[binary file](http://gnuarmeclipse.github.io/plugins/features/#extra-build-steps).
 
 ![screenshot](doc/pic/README_02.png)
 
