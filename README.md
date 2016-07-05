@@ -45,7 +45,8 @@ To program EEPROM, run the command:
 JFlash.bat <BIN_FILE>
 ```
 The batch file starts J-Link GDB server at first, then runs GDB client with JFlash script
-and the binary file as arguments. Something in this way:
+and the name of [raw binary file](http://gnuarmeclipse.github.io/plugins/features/#extra-build-steps)
+as arguments. Something in this way:
 ```
 start /B JLinkGDBServerCL -if swd -device "Cortex-M3" -endian little -speed 2000 -port 2331 -singlerun
 arm-none-eabi-gdb-py --batch -x JFlash.py -ex "py program_from_shell('yourapp.bin')"
@@ -65,7 +66,7 @@ In the debugger launch configuration `GDB SEGGER J-Link Debugging → Debugger`,
 
 Also, in `GDB SEGGER J-Link Debugging → Startup`, you should select<br>
 `Load Symbols and Executable → Load Executable → Use file:`, and add the name of
-[binary file](http://gnuarmeclipse.github.io/plugins/features/#extra-build-steps).
+[raw binary file](http://gnuarmeclipse.github.io/plugins/features/#extra-build-steps).
 
 ![screenshot](doc/pic/README_02.png)
 
