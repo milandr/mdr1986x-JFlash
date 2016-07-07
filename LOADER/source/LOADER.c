@@ -75,7 +75,7 @@ void eeprom_erase( void )
 		upause( 5 );
 	}
 	MDR_EEPROM->CMD &= EEPROM_CMD_DELAY_Msk;
-	MDR_EEPROM->KEY = 0;
+	MDR_EEPROM->KEY  = 0;
 	upause( 1 );
 	__enable_irq();
 
@@ -125,7 +125,7 @@ uint32_t eeprom_write_block( uint32_t addr, EEPROM_WORD *data, uint32_t len )
 		data += 1;
 	}
 	MDR_EEPROM->CMD &= EEPROM_CMD_DELAY_Msk;
-	MDR_EEPROM->KEY = 0;
+	MDR_EEPROM->KEY  = 0;
 	upause( 1 );
 	__enable_irq();
 
