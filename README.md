@@ -13,12 +13,10 @@ with native [SEGGER J-Link drivers](https://www.segger.com/jlink-software.html).
 Unfortunately, SEGGER still knows nothing about EEPROM programming algorithm for Milandr MCU 1986x series.
 
 As a result you cannot use the native J-Flash utility. Moreover, you had to use [OpenOCD](http://openocd.org/)
-instead of native drivers<br>
-for debugging with GNU ARM Eclipse.
+instead of native drivers for debugging with GNU ARM Eclipse.
 
 OpenOCD is quite good, but at present, slightly less functional, for example, [OpenOCD debugging Eclipse plug-in]
-(http://gnuarmeclipse.github.io/debug/openocd/)<br>
-does not support capturing of Serial Wire Output (SWO).
+(http://gnuarmeclipse.github.io/debug/openocd/) does not support capturing of Serial Wire Output (SWO).
 
 Also you are able to use SEGGER [Real Time Transfer](https://www.segger.com/jlink-rtt.html) (RTT)
 only with native drivers.
@@ -30,7 +28,8 @@ only with native drivers.
 
 #### Any limits?
 
-Yes, at present only MDR1986BE9x (MDR32F9Qx) series is supported.<br>
+Yes, at present only MDR1986BE9x (MDR32F9Qx) series is supported.
+
 It hasn't been tested on Linux yet...
 
 #### How to program EEPROM using GNU toolchain
@@ -64,7 +63,7 @@ In the debugger launch configuration `GDB SEGGER J-Link Debugging → Debugger`,
 
 ![screenshot](doc/pic/README_01.png)
 
-Also, in `GDB SEGGER J-Link Debugging → Startup`, you should select<br>
+Also, in `GDB SEGGER J-Link Debugging → Startup`, you should select
 `Load Symbols and Executable → Load Executable → Use file:`, and add the name of
 [raw binary file](http://gnuarmeclipse.github.io/plugins/features/#extra-build-steps).
 
@@ -72,7 +71,7 @@ Also, in `GDB SEGGER J-Link Debugging → Startup`, you should select<br>
 
 The `JFlash.py` script redefines GDB `load` command, so when Eclipse calls `load`, the script runs instead.
 
-The script creates `JFlash.log` in the folder of the current project, also LOADER prints trace into RTT, just<br>
+The script creates `JFlash.log` in the folder of the current project, also LOADER prints trace into RTT, just
 uncomment launch of RTT client in the batch file.
 
 At the end `JFlash.py` sets address of RTT structure of our binary if `.map` file exists.
