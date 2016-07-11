@@ -44,7 +44,8 @@ To program EEPROM, run the command:
 JFlash.bat <BIN_FILE>
 ```
 The batch file starts J-Link GDB server at first, then runs GDB client to execute `program_from_shell`
-function of JFlash script with the name of [raw binary file](http://gnuarmeclipse.github.io/plugins/features/#extra-build-steps)
+function of JFlash script with the name of
+[raw binary file](http://gnuarmeclipse.github.io/plugins/features/#extra-build-steps)
 as argument, something in this way:
 ```
 start /B JLinkGDBServerCL -if swd -device "Cortex-M3" -endian little -speed 2000 -port 2331 -singlerun
@@ -71,7 +72,7 @@ Also, in `GDB SEGGER J-Link Debugging → Startup`, you should select
 
 The `JFlash.py` script redefines GDB `load` command, so when Eclipse calls `load`, the script runs instead.
 
-The script creates `JFlash.log` in the folder of the current project, also LOADER prints trace into RTT, just
-uncomment launch of RTT client in the batch file.
+The script creates `JFlash.log` in the folder of the current project, also LOADER prints trace into RTT,
+to launch RTT client you can uncomment it in the batch file.
 
-At the end `JFlash.py` sets address of RTT structure of our binary if `.map` file exists.
+At the end, if the mapfile of our binary exists, `JFlash.py` sets the address of RTT structure.
