@@ -112,6 +112,7 @@ def set_reg( r, val ):
     return execute( 'set $%s = %d' % ( r, val ))
 
 #  Upload binary data form file to memory
+#  This command does not allow to quote the filename with "", so you can NOT use space characters in the filename.
 def load_binary( fn, offset, start=None, end=None ):
     st = 'restore %s binary %d' % ( fn, offset )
     if start is not None:
@@ -121,6 +122,7 @@ def load_binary( fn, offset, start=None, end=None ):
     return execute( st )
 
 #  Save data form memory to dump file
+#  This command does not allow to quote the filename with "", so you can NOT use space characters in the filename.
 def dump_binary( fn, offset, l ):
     return execute( 'dump binary memory %s %d %d' % ( fn, offset, offset + l ))
 

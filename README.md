@@ -30,6 +30,9 @@ only with native drivers.
 
 Yes, at present only MDR1986BE9x (MDR32F9Qx) series is supported.
 
+__Windows__: Some GDB commands do not allow to quote filenames with "", so you can NOT use space characters
+in `JFlash` installation path.
+
 It hasn't been tested on Linux yet...
 
 #### How to program EEPROM using GNU toolchain
