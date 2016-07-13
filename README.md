@@ -30,7 +30,7 @@ only with native drivers.
 
 Yes, at present only MDR1986BE9x (MDR32F9Qx) series is supported.
 
-__Windows__: Some GDB commands do not allow to quote filenames with "", so you can NOT use space characters
+__Windows__: Some GDB commands do not allow to quote filenames with `""`, so you can NOT use space characters
 in `JFlash` installation path.
 
 It hasn't been tested on Linux yet...
@@ -78,4 +78,5 @@ The `JFlash.py` script redefines GDB `load` command, so when Eclipse calls `load
 The script creates `JFlash.log` in the folder of the current project, also LOADER prints trace into RTT,
 to launch RTT client you can uncomment it in the batch file.
 
-At the end, if the mapfile of our binary exists, `JFlash.py` sets the address of RTT structure.
+At the end, if the mapfile of our binary exists, `JFlash.py` sets the address of RTT structure,
+and you are able to interact with loaded binary using the same RTT client.
