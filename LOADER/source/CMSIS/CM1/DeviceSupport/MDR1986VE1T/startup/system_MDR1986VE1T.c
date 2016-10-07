@@ -1,23 +1,23 @@
 /**
   ******************************************************************************
-  * @file    system_MDR32F9Qx.c
-  * @author  Phyton Application Team
+  * @file    system_MDR1986VE1T.c
+  * @author  Milandr Application Team
   * @version V1.4.0
-  * @date    11/06/2010
-  * @brief   CMSIS Cortex-M3 Device Peripheral Access Layer System Source File.
+  * @date    11/06/2013
+  * @brief   CMSIS Cortex-M1 Device Peripheral Access Layer System Source File.
   ******************************************************************************
   * <br><br>
   *
   * THE PRESENT FIRMWARE WHICH IS FOR GUIDANCE ONLY AIMS AT PROVIDING CUSTOMERS
   * WITH CODING INFORMATION REGARDING THEIR PRODUCTS IN ORDER FOR THEM TO SAVE
-  * TIME. AS A RESULT, PHYTON SHALL NOT BE HELD LIABLE FOR ANY DIRECT, INDIRECT
+  * TIME. AS A RESULT, Milandr SHALL NOT BE HELD LIABLE FOR ANY DIRECT, INDIRECT
   * OR CONSEQUENTIAL DAMAGES WITH RESPECT TO ANY CLAIMS ARISING
   * FROM THE CONTENT OF SUCH FIRMWARE AND/OR THE USE MADE BY CUSTOMERS OF THE
   * CODING INFORMATION CONTAINED HEREIN IN CONNECTION WITH THEIR PRODUCTS.
   *
-  * <h2><center>&copy; COPYRIGHT 2010 Phyton</center></h2>
+  * <h2><center>&copy; COPYRIGHT 2013 Milandr</center></h2>
   ******************************************************************************
-  * FILE system_MDR32F9Qx.c
+  * FILE system_MDR1986VE1T.c
   */
 
 
@@ -25,11 +25,11 @@
   * @{
   */
 
-/** @defgroup MDR1986VE9x
+/** @defgroup MDR1986VE1T
  *  @{
  */
 
-/** @addtogroup __MDR32F9QX MDR32F9QX System
+/** @addtogroup __MDR1986VE1T MDR1986VE1T System
   * @{
   */
 
@@ -37,12 +37,12 @@
   * @{
   */
 
-#include "MDR32Fx.h"
+#include "MDR1986VE1T.h"
 #include "MDR32F9Qx_config.h"
 
 /** @} */ /* End of group System_Private_Includes */
 
-/** @addtogroup __MDR32F9QX_System_Private_Variables MDR32F9QX System Private Variables
+/** @addtogroup __MDR1986VE1T_System_Private_Variables MDR1986VE1T System Private Variables
   * @{
   */
 
@@ -52,9 +52,9 @@
   uint32_t SystemCoreClock = (uint32_t)8000000;         /*!< System Clock Frequency (Core Clock)
                                                          *   default value */
 
-/** @} */ /* End of group __MDR32F9QX_System_Private_Variables */
+/** @} */ /* End of group __MDR1986VE1T_System_Private_Variables */
 
-/** @addtogroup __MDR32F9QX_System_Private_Functions MDR32F9QX System Private Functions
+/** @addtogroup __MDR1986VE1T_System_Private_Functions MDR1986VE1T System Private Functions
   * @{
   */
 
@@ -141,7 +141,6 @@ void SystemCoreClockUpdate (void)
 void SystemInit (void)
 {
   /* Reset the RST clock configuration to the default reset state */
-  SCB->VTOR = 0x08000000;
 
   /* Reset all clock but RST_CLK & BKP_CLK bits */
   MDR_RST_CLK->PER_CLOCK   = (uint32_t)0x8000010;
@@ -164,14 +163,14 @@ void SystemInit (void)
   SystemCoreClockUpdate();
 }
 
-/** @} */ /* End of group __MDR32F9QX_System_Private_Functions */
+/** @} */ /* End of group __MDR1986VE1T_System_Private_Functions */
 
-/** @} */ /* End of group __MDR32F9QX */
+/** @} */ /* End of group __MDR1986VE1T */
 
-/** @} */ /* End of group MDR1986VE9x */
+/** @} */ /* End of group MDR1986VE1T */
 
 /** @} */ /* End of group __CMSIS */
 
-/******************* (C) COPYRIGHT 2010 Phyton *********************************
+/******************* (C) COPYRIGHT 2013 Milandr *********************************
 *
-* END OF FILE system_MDR32F9Qx.c */
+* END OF FILE system_MDR1986VE1T.c */

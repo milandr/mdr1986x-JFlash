@@ -8,6 +8,8 @@ using [GNU ARM Eclipse](http://gnuarmeclipse.github.io/)
 with native [SEGGER J-Link drivers](https://www.segger.com/jlink-software.html).
 - Internal EEPROM programming using [GNU toolchain](https://launchpad.net/gcc-arm-embedded).
 
+Supported microcontrollers: 1986BE9x (MDR32F9Qx), 1986BE1 (MDR32F1), 1986BE3 (MDR32F3).
+
 #### What's the problem?
 
 Unfortunately, SEGGER still knows nothing about EEPROM programming algorithm for Milandr MCU 1986x series.
@@ -23,12 +25,10 @@ only with native drivers.
 
 #### How does it work?
 
-- RAM code (`LOADER.bin`) implements EEPROM programming algorithm.
+- LOADER (RAMCode) implements EEPROM programming algorithm.
 - GDB script on Python (`JFlash.py`) redefines the GDB `load` command.
 
 #### Any limits?
-
-Yes, at present only MDR1986BE9x (MDR32F9Qx) series is supported.
 
 __Windows__: Some GDB commands do not allow to quote filenames with `""`, so you can NOT use space characters
 in `JFlash` installation path.
@@ -51,7 +51,7 @@ function of JFlash script with the name of
 [raw binary file](http://gnuarmeclipse.github.io/plugins/features/#extra-build-steps)
 as argument, something in this way:
 ```
-start /B JLinkGDBServerCL -if swd -device "Cortex-M3" -endian little -speed 2000 -port 2331 -singlerun
+start /B JLinkGDBServerCL -if swd -device "Cortex-M1" -endian little -speed 2000 -port 2331 -singlerun
 arm-none-eabi-gdb-py --batch -x JFlash.py -ex "py program_from_shell('yourapp.bin')"
 ```
 
@@ -61,7 +61,7 @@ arm-none-eabi-gdb-py --batch -x JFlash.py -ex "py program_from_shell('yourapp.bi
 - Configure [J-Link debugging Eclipse plug-in](http://gnuarmeclipse.github.io/debug/jlink/).
 
 In the debugger launch configuration `GDB SEGGER J-Link Debugging → Debugger`, you should:
-- Set `"Cortex-M3"` into `J-Link GDB Server Setup → Device name`.
+- Set `"Cortex-M1"` or `"Cortex-M3"` (depends on MCU) into `J-Link GDB Server Setup → Device name`.
 - Replace `gdb` with `gdb-py` in `GDB Client Setup → Executable`.
 - Add `-x JFlash.py` into `GDB Client Setup → Other options` (use the filename with full path).
 

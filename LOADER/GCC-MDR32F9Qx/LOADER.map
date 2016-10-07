@@ -8,8 +8,10 @@ c:/program files (x86)/gnu tools arm embedded/4.9 2015q3/bin/../lib/gcc/arm-none
 Allocating common symbols
 Common symbol       size              file
 
+ld_state            0x4               ./source/LOADER.o
+ld_error            0x4               ./source/LOADER.o
 _SEGGER_RTT         0x48              ./source/RTT/SEGGER_RTT.o
-iface               0x4010            ./source/LOADER.o
+ld_write            0x4008            ./source/LOADER.o
 
 Discarded input sections
 
@@ -26,6 +28,8 @@ Discarded input sections
                 0x00000000      0x104 ./source/RTT/SEGGER_RTT.o
  .text.SEGGER_RTT_Read
                 0x00000000       0x38 ./source/RTT/SEGGER_RTT.o
+ .text.SEGGER_RTT_WriteWithOverwriteNoLock
+                0x00000000      0x128 ./source/RTT/SEGGER_RTT.o
  .text.SEGGER_RTT_WriteSkipNoLock
                 0x00000000      0x13c ./source/RTT/SEGGER_RTT.o
  .text.SEGGER_RTT_GetKey
@@ -47,7 +51,7 @@ Discarded input sections
  .text.SEGGER_RTT_SetNameDownBuffer
                 0x00000000       0x64 ./source/RTT/SEGGER_RTT.o
  .text.SEGGER_RTT_Init
-                0x00000000       0x18 ./source/RTT/SEGGER_RTT.o
+                0x00000000        0xc ./source/RTT/SEGGER_RTT.o
  .text.SEGGER_RTT_SetTerminal
                 0x00000000       0xb8 ./source/RTT/SEGGER_RTT.o
  .text.SEGGER_RTT_TerminalOut
@@ -94,7 +98,7 @@ LOAD c:/program files (x86)/gnu tools arm embedded/4.9 2015q3/bin/../lib/gcc/arm
 LOAD c:/program files (x86)/gnu tools arm embedded/4.9 2015q3/bin/../lib/gcc/arm-none-eabi/4.9.3/../../../../arm-none-eabi/lib/armv7-m\libc_nano.a
 END GROUP
 
-.text           0x20000000     0x114a
+.text           0x20000000     0x110a
  *(.isr_vector)
  .isr_vector    0x20000000       0xc0 ./source/CMSIS/CM3/DeviceSupport/MDR32F9Qx/startup/gcc/startup_MDR32F9Qx.o
                 0x20000000                __isr_vector
@@ -177,12 +181,12 @@ END GROUP
  .text.eeprom_write_block
                 0x20000dc4      0x16c ./source/LOADER.o
                 0x20000dc4                eeprom_write_block
- .text.main     0x20000f30       0xec ./source/LOADER.o
+ .text.main     0x20000f30       0xc4 ./source/LOADER.o
                 0x20000f30                main
- .text.memcpy   0x2000101c       0x16 c:/program files (x86)/gnu tools arm embedded/4.9 2015q3/bin/../lib/gcc/arm-none-eabi/4.9.3/../../../../arm-none-eabi/lib/armv7-m\libc_nano.a(lib_a-memcpy.o)
-                0x2000101c                memcpy
- .text.strlen   0x20001032       0x10 c:/program files (x86)/gnu tools arm embedded/4.9 2015q3/bin/../lib/gcc/arm-none-eabi/4.9.3/../../../../arm-none-eabi/lib/armv7-m\libc_nano.a(lib_a-strlen.o)
-                0x20001032                strlen
+ .text.memcpy   0x20000ff4       0x16 c:/program files (x86)/gnu tools arm embedded/4.9 2015q3/bin/../lib/gcc/arm-none-eabi/4.9.3/../../../../arm-none-eabi/lib/armv7-m\libc_nano.a(lib_a-memcpy.o)
+                0x20000ff4                memcpy
+ .text.strlen   0x2000100a       0x10 c:/program files (x86)/gnu tools arm embedded/4.9 2015q3/bin/../lib/gcc/arm-none-eabi/4.9.3/../../../../arm-none-eabi/lib/armv7-m\libc_nano.a(lib_a-strlen.o)
+                0x2000100a                strlen
  *(.init)
  *(.fini)
  *crtbegin.o(.ctors)
@@ -196,43 +200,43 @@ END GROUP
  *(SORT(.dtors.*))
  *(.dtors)
  *(.rodata*)
- *fill*         0x20001042        0x2 
- .rodata        0x20001044       0x17 ./source/RTT/SEGGER_RTT.o
- *fill*         0x2000105b        0x1 
- .rodata._aV2C.4789
-                0x2000105c       0x10 ./source/RTT/SEGGER_RTT_printf.o
- .rodata        0x2000106c       0xde ./source/LOADER.o
+ *fill*         0x2000101a        0x2 
+ .rodata        0x2000101c       0x17 ./source/RTT/SEGGER_RTT.o
+ *fill*         0x20001033        0x1 
+ .rodata._aV2C.4793
+                0x20001034       0x10 ./source/RTT/SEGGER_RTT_printf.o
+ .rodata        0x20001044       0xc6 ./source/LOADER.o
  *(.eh_frame*)
 
-.glue_7         0x2000114c        0x0
+.glue_7         0x2000110c        0x0
  .glue_7        0x00000000        0x0 linker stubs
 
-.glue_7t        0x2000114c        0x0
+.glue_7t        0x2000110c        0x0
  .glue_7t       0x00000000        0x0 linker stubs
 
-.vfp11_veneer   0x2000114c        0x0
+.vfp11_veneer   0x2000110c        0x0
  .vfp11_veneer  0x00000000        0x0 linker stubs
 
-.v4_bx          0x2000114c        0x0
+.v4_bx          0x2000110c        0x0
  .v4_bx         0x00000000        0x0 linker stubs
 
-.iplt           0x2000114c        0x0
+.iplt           0x2000110c        0x0
  .iplt          0x00000000        0x0 ./source/RTT/SEGGER_RTT.o
 
-.rel.dyn        0x2000114c        0x0
+.rel.dyn        0x2000110c        0x0
  .rel.iplt      0x00000000        0x0 ./source/RTT/SEGGER_RTT.o
 
 .ARM.extab
  *(.ARM.extab* .gnu.linkonce.armextab.*)
-                0x2000114c                __exidx_start = .
+                0x2000110c                __exidx_start = .
 
 .ARM.exidx
  *(.ARM.exidx* .gnu.linkonce.armexidx.*)
-                0x2000114c                __exidx_end = .
-                0x2000114c                . = ALIGN (0x4)
-                0x2000114c                __etext = .
+                0x2000110c                __exidx_end = .
+                0x2000110c                . = ALIGN (0x4)
+                0x2000110c                __etext = .
 
-.data           0x20002000        0x4 load address 0x2000114c
+.data           0x20002000        0x4 load address 0x2000110c
                 0x20002000                __data_start__ = .
  *(.ramfunc*)
                 0x20002000                . = ALIGN (0x4)
@@ -259,10 +263,10 @@ END GROUP
                 0x20002004                . = ALIGN (0x4)
                 0x20002004                __data_end__ = .
 
-.igot.plt       0x20002004        0x0 load address 0x20001150
+.igot.plt       0x20002004        0x0 load address 0x20001110
  .igot.plt      0x00000000        0x0 ./source/RTT/SEGGER_RTT.o
 
-.bss            0x20002004     0x4468 load address 0x20001150
+.bss            0x20002004     0x4468 load address 0x20001110
                 0x20002004                . = ALIGN (0x4)
                 0x20002004                __bss_start__ = .
  *(.bss*)
@@ -274,22 +278,25 @@ END GROUP
  COMMON         0x20002414       0x48 ./source/RTT/SEGGER_RTT.o
                 0x20002414                _SEGGER_RTT
  COMMON         0x2000245c     0x4010 ./source/LOADER.o
-                0x2000245c                iface
+                0x2000245c                ld_state
+                0x20002460                ld_error
+                0x20002464                ld_write
                 0x2000646c                . = ALIGN (0x4)
                 0x2000646c                __bss_end__ = .
 
-.heap           0x20006470        0x0
+.heap           0x20006470      0x400
                 0x20006470                __end__ = .
                 0x20006470                PROVIDE (end, .)
  *(.heap*)
- .heap          0x20006470        0x0 ./source/CMSIS/CM3/DeviceSupport/MDR32F9Qx/startup/gcc/startup_MDR32F9Qx.o
-                0x20006470                __HeapLimit = .
+ .heap          0x20006470      0x400 ./source/CMSIS/CM3/DeviceSupport/MDR32F9Qx/startup/gcc/startup_MDR32F9Qx.o
+                0x20006470                __HeapBase
+                0x20006870                __HeapLimit = .
 
-.stack_dummy    0x20006470     0x1000
+.stack_dummy    0x20006470      0x800
  *(.stack*)
- .stack         0x20006470     0x1000 ./source/CMSIS/CM3/DeviceSupport/MDR32F9Qx/startup/gcc/startup_MDR32F9Qx.o
+ .stack         0x20006470      0x800 ./source/CMSIS/CM3/DeviceSupport/MDR32F9Qx/startup/gcc/startup_MDR32F9Qx.o
                 0x20008000                __StackTop = (ORIGIN (RAM) + 0x6000)
-                0x20007000                __StackLimit = (__StackTop - SIZEOF (.stack_dummy))
+                0x20007800                __StackLimit = (__StackTop - SIZEOF (.stack_dummy))
                 0x20008000                PROVIDE (__stack, __StackTop)
                 0x00000001                ASSERT ((__StackLimit >= __HeapLimit), region RAM overflowed with stack)
 OUTPUT(LOADER.elf elf32-littlearm)

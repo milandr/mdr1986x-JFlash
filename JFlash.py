@@ -10,53 +10,67 @@ Copyright (c) 2016 Vitaly Kravtsov (in4lio@gmail.com)
 See the LICENSE file.
 """
 
-APP             = 'JFlash'
-VERSION         = '0.6.2'
+APP               = 'JFlash'
+VERSION           = '0.7.0'
 
 #  Write CRC-32 of binary file right after the image in EEPROM
-CRC32_WRITING   = True
+CRC32_WRITING     = True
 
 #  J-Link GDB Server
-HOST            = 'localhost'
-PORT            = 2331
+HOST              = 'localhost'
+PORT              = 2331
 
-LOADER          = 'LOADER/LOADER.bin'
-DUMP            = 'dump.bin'
+LOADER_F9Qx       = 'LOADER/LOADER_F9Qx.bin'
+LOADER_F1         = 'LOADER/LOADER_F1.bin'
+DUMP              = 'dump.bin'
 
 #  LOADER layout (according to MAP file)
 #  NOTE: Use 'mapper.py' if you need to update the following definitions.
-LD_COMPILER     = 1
-LD_START        = 0x20000b44
-LD_STACK        = 0x20008000
-LD_IFACE        = 0x2000245c
-LD_IFACE_SZ     = 0x4010
-LD_RTT          = 0x20002414
+LD_COMPILER_F9Qx  = 1
+LD_START_F9Qx     = 0x20000b44
+LD_STACK_F9Qx     = 0x20008000
+LD_WRITE_F9Qx     = 0x20002464
+LD_WRITE_SZ_F9Qx  = 0x4008
+LD_STATE_F9Qx     = 0x2000245c
+LD_ERROR_F9Qx     = 0x20002460
+LD_RTT_F9Qx       = 0x20002414
 
-LD_FIELD_SZ     = 4
-LD_DATA         = LD_IFACE
-LD_DATA_SZ      = LD_IFACE_SZ - LD_FIELD_SZ * 4
-LD_ADDR         = LD_DATA  + LD_DATA_SZ
-LD_LEN          = LD_ADDR  + LD_FIELD_SZ
-LD_STATE        = LD_LEN   + LD_FIELD_SZ
-LD_ERR          = LD_STATE + LD_FIELD_SZ
+LD_COMPILER_F1    = 1
+LD_START_F1       = 0x201000c0
+LD_STACK_F1       = 0x20008000
+LD_WRITE_F1       = 0x20000008
+LD_WRITE_SZ_F1    = 0x4008
+LD_STATE_F1       = 0x20100620
+LD_ERROR_F1       = 0x20000004
+LD_RTT_F1         = 0
+
+LD_ADDR_SZ        = 4
+LD_LEN_SZ         = 4
 
 #  LOADER running command or state
-START           = 0
-ERASE           = 1
-WRITE_BLOCK     = 2
-IDLE            = 0xFFFFFFFF
+START             = 0
+ERASE             = 1
+WRITE_BLOCK       = 2
+IDLE              = 0xFFFFFFFF
 
 #  LOADER error
-ERR_NONE        = 0
-ERR_ADDR        = 1
-ERR_ADDR_ALIGN  = 2
-ERR_ADDR_END    = 3
+ERR_NONE          = 0
+ERR_ADDR          = 1
+ERR_ADDR_ALIGN    = 2
+ERR_ADDR_END      = 3
 
 #  MCU memory layout
-RAM_START       = 0x20000000
-EEPROM_START    = 0x08000000
+RAM_START_F9Qx    = 0x20000000
+EEPROM_START_F9Qx = 0x08000000
 
-RE_RTT_ADDR     = r'\s+(0x[0-9a-fA-F]+)\s+_SEGGER_RTT\s*'
+RAM_START_F1      = 0x20100000
+EEPROM_START_F1   = 0x00000000
+
+CPUID             = 0xE000ED00
+CPUID_CM1         = 0x411CC210
+CPUID_CM3         = 0x412FC230
+
+RE_RTT_ADDR       = r'\s+(0x[0-9a-fA-F]+)\s+_SEGGER_RTT\s*'
 
 import gdb
 import sys
@@ -68,10 +82,10 @@ import re
 import binascii
 
 #  Logging
-LOG             = APP + '.log'
-LOG_LEVEL       = logging.DEBUG
-LOG_FORMAT      = '%(asctime)s.%(msecs)03d %(levelname)-8s %(message)s'
-LOG_TIME        = '%H:%M:%S'
+LOG               = APP + '.log'
+LOG_LEVEL         = logging.DEBUG
+LOG_FORMAT        = '%(asctime)s.%(msecs)03d %(levelname)-8s %(message)s'
+LOG_TIME          = '%H:%M:%S'
 
 log = logging.getLogger( 'log' )
 log.setLevel( LOG_LEVEL )
@@ -153,17 +167,17 @@ def aligned( val, align ):
 SCRIPT_DIR = os.path.dirname( os.path.realpath( __file__ ))
 
 #  Verify EEPROM
-def verify( binary, binary_sz ):
+def verify( offset, binary, binary_sz ):
     dump = os.path.join( SCRIPT_DIR, DUMP )
-    dump_binary( dump, EEPROM_START, binary_sz )
+    dump_binary( dump, offset, binary_sz )
 
     return filecmp.cmp( binary, dump )
 
 
-# # # #  MAIN SCRIPT
+# # # #  MAIN SCRIPT  # # # #
 
 def program( binary ):
-    log.info( 'MCU MDR32F9Qx %s %s', APP, VERSION )
+    log.info( '%s %s', APP, VERSION )
 
     if not os.path.exists( binary ):
         log.error( 'Binary file not found (%s).', binary )
@@ -175,7 +189,6 @@ def program( binary ):
     log.info( 'Binary file: %s', binary )
     log.info( 'Size: %d', binary_sz )
     log.info( 'CRC-32: %#08x', crc32 )
-    log.info( 'MCU data buffer at %#x', LD_DATA )
 
     log.info( 'Hello!' )
 
@@ -183,24 +196,70 @@ def program( binary ):
     log.debug( fb.strip())
     monitor( 'halt' )
 
-    # # # #  VERIFY EEPROM BEFORE PROGRAMMING
+    # # # #  IDENTIFY MCU  # # # #
 
-    if verify( binary, binary_sz ):
+    cpuid = mem32( CPUID )
+    MCU_F9Qx = cpuid == CPUID_CM3
+    if cpuid == CPUID_CM3:
+        core = 'CM3'
+    elif cpuid == CPUID_CM1:
+        core = 'CM1'
+    else:
+        core = 'unknown'
+    log.info( 'CPUID: %#x (%s)', cpuid, core )
+
+    if MCU_F9Qx:
+        LOADER        = LOADER_F9Qx
+        LD_START      = LD_START_F9Qx
+        LD_STACK      = LD_STACK_F9Qx
+        LD_WRITE      = LD_WRITE_F9Qx
+        LD_WRITE_SZ   = LD_WRITE_SZ_F9Qx
+        LD_STATE      = LD_STATE_F9Qx
+        LD_ERROR      = LD_ERROR_F9Qx
+        LD_RTT        = LD_RTT_F9Qx
+        RAM_START     = RAM_START_F9Qx
+        EEPROM_START  = EEPROM_START_F9Qx
+    else:
+        LOADER        = LOADER_F1
+        LD_START      = LD_START_F1
+        LD_STACK      = LD_STACK_F1
+        LD_WRITE      = LD_WRITE_F1
+        LD_WRITE_SZ   = LD_WRITE_SZ_F1
+        LD_STATE      = LD_STATE_F1
+        LD_ERROR      = LD_ERROR_F1
+        LD_RTT        = LD_RTT_F1
+        RAM_START     = RAM_START_F1
+        EEPROM_START  = EEPROM_START_F1
+
+    LD_DATA           = LD_WRITE
+    LD_DATA_SZ        = LD_WRITE_SZ - LD_ADDR_SZ - LD_LEN_SZ
+    LD_ADDR           = LD_DATA + LD_DATA_SZ
+    LD_LEN            = LD_ADDR + LD_ADDR_SZ
+
+    log.info( 'MCU data buffer at %#x', LD_DATA )
+    log.info( 'MCU state at %#x', LD_STATE )
+    crc32_addr = EEPROM_START + aligned( binary_sz, 4 )
+
+    # # # #  VERIFY EEPROM BEFORE PROGRAMMING  # # # #
+
+    if verify( EEPROM_START, binary, binary_sz ):
         log.info( 'Binary file exactly matches with EEPROM content.' )
 
         set_RTT( binary )
         return True
 
-    # # # #  START LOADER
+    # # # #  START LOADER  # # # #
 
     log.info( 'LOADER uploading...' )
     fb = load_binary( os.path.join( SCRIPT_DIR, LOADER ), RAM_START )
     log.debug( fb.strip())
     set_reg( MSP, LD_STACK )
     set_reg( PC , LD_START & ~1 )
-    set_mem32( 0xE000E008, 0x20000000 )
+    if MCU_F9Qx:
+        set_mem32( 0xE000E008, 0x20000000 )
     set_mem32( LD_STATE, START )
-    monitor( 'exec SetRTTAddr ' + hex( LD_RTT ))
+    if LD_RTT:
+        monitor( 'exec SetRTTAddr ' + hex( LD_RTT ))
     monitor( 'go' )
 
     #  Check LOADER is started
@@ -209,7 +268,7 @@ def program( binary ):
         log.error( 'LOADER is not running.' )
         return False
 
-    # # # #  ERASE EEPROM
+    # # # #  ERASE EEPROM  # # # #
 
     log.info( 'EEPROM erasing...' )
     monitor( 'halt' )
@@ -224,12 +283,16 @@ def program( binary ):
     sleep( 0.2 )
     monitor( 'halt' )
 
+    if not MCU_F9Qx:
+        #  Workaround MDR32F1 BUG 0007, we need to renew EEPROM cache...
+        mem32( crc32_addr )
+
     #  Check very first DWORD (32 bit)
     if mem32( EEPROM_START ) != 0xFFFFFFFF:
         log.error( 'EEPROM is not empty.' )
         return False
 
-    # # # #  WRITING CYCLE
+    # # # #  WRITING CYCLE  # # # #
 
     rest = binary_sz
     block = 0
@@ -261,23 +324,26 @@ def program( binary ):
         monitor( 'halt' )
 
         #  Check error
-        if mem32( LD_ERR ) != ERR_NONE:
-            log.error( 'Fail to write data (E%d).', mem32( LD_ERR ))
+        if mem32( LD_ERROR ) != ERR_NONE:
+            log.error( 'Fail to write data (E%d).', mem32( LD_ERROR ))
             return False
 
         start += sz
 
-    # # # #  VERIFY EEPROM AFTER PROGRAMMING
+    # # # #  VERIFY EEPROM AFTER PROGRAMMING  # # # #
 
-    if not verify( binary, binary_sz ):
+    if not MCU_F9Qx:
+        #  Workaround MDR32F1 BUG 0007, we need to renew EEPROM cache...
+        mem32( crc32_addr )
+
+    if not verify( EEPROM_START, binary, binary_sz ):
         log.error( 'Binary file does NOT match with EEPROM content.' )
         return False
 
-    # # # #  WRITE CRC-32
+    # # # #  WRITE CRC-32  # # # #
 
     if CRC32_WRITING:
         log.info( 'CRC-32 writing...' )
-        crc32_addr = EEPROM_START + aligned( binary_sz, 4 )
 
         set_mem32( LD_DATA, crc32 )
         set_mem32( LD_ADDR, crc32_addr )
@@ -294,11 +360,11 @@ def program( binary ):
         monitor( 'halt' )
 
         #  Check error
-        if mem32( LD_ERR ) != ERR_NONE:
-            log.error( 'Fail to write CRC-32 (E%d).', mem32( LD_ERR ))
+        if mem32( LD_ERROR ) != ERR_NONE:
+            log.error( 'Fail to write CRC-32 (E%d).', mem32( LD_ERROR ))
             return False
 
-    # # # #  RESET MCU
+    # # # #  RESET MCU  # # # #
 
     set_RTT( binary )
     fb = monitor( 'reset 0' )

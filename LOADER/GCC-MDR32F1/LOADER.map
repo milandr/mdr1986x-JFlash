@@ -1,0 +1,244 @@
+Archive member included because of file (symbol)
+
+c:/program files (x86)/gnu tools arm embedded/4.9 2015q3/bin/../lib/gcc/arm-none-eabi/4.9.3/armv6-m\libgcc.a(_udivsi3.o)
+                              ./source/LOADER.o (__aeabi_uidiv)
+c:/program files (x86)/gnu tools arm embedded/4.9 2015q3/bin/../lib/gcc/arm-none-eabi/4.9.3/armv6-m\libgcc.a(_dvmd_tls.o)
+                              c:/program files (x86)/gnu tools arm embedded/4.9 2015q3/bin/../lib/gcc/arm-none-eabi/4.9.3/armv6-m\libgcc.a(_udivsi3.o) (__aeabi_idiv0)
+
+Allocating common symbols
+Common symbol       size              file
+
+ld_error            0x4               ./source/LOADER.o
+ld_write            0x4008            ./source/LOADER.o
+
+Discarded input sections
+
+ .data          0x00000000        0x0 ./source/CMSIS/CM1/DeviceSupport/MDR1986VE1T/startup/gcc/startup_MDR1986VE1T.o
+ .bss           0x00000000        0x0 ./source/CMSIS/CM1/DeviceSupport/MDR1986VE1T/startup/gcc/startup_MDR1986VE1T.o
+ .text          0x00000000        0x0 ./source/CMSIS/CM1/DeviceSupport/MDR1986VE1T/startup/system_MDR1986VE1T.o
+ .data          0x00000000        0x0 ./source/CMSIS/CM1/DeviceSupport/MDR1986VE1T/startup/system_MDR1986VE1T.o
+ .bss           0x00000000        0x0 ./source/CMSIS/CM1/DeviceSupport/MDR1986VE1T/startup/system_MDR1986VE1T.o
+ .text          0x00000000        0x0 ./source/LOADER.o
+ .data          0x00000000        0x0 ./source/LOADER.o
+ .bss           0x00000000        0x0 ./source/LOADER.o
+ .data          0x00000000        0x0 c:/program files (x86)/gnu tools arm embedded/4.9 2015q3/bin/../lib/gcc/arm-none-eabi/4.9.3/armv6-m\libgcc.a(_udivsi3.o)
+ .bss           0x00000000        0x0 c:/program files (x86)/gnu tools arm embedded/4.9 2015q3/bin/../lib/gcc/arm-none-eabi/4.9.3/armv6-m\libgcc.a(_udivsi3.o)
+ .data          0x00000000        0x0 c:/program files (x86)/gnu tools arm embedded/4.9 2015q3/bin/../lib/gcc/arm-none-eabi/4.9.3/armv6-m\libgcc.a(_dvmd_tls.o)
+ .bss           0x00000000        0x0 c:/program files (x86)/gnu tools arm embedded/4.9 2015q3/bin/../lib/gcc/arm-none-eabi/4.9.3/armv6-m\libgcc.a(_dvmd_tls.o)
+
+Memory Configuration
+
+Name             Origin             Length             Attributes
+FLASH            0x00000000         0x00020000         xr
+RAM              0x20000000         0x00008000         rw
+IRAM             0x20100000         0x00004000         xrw
+*default*        0x00000000         0xffffffff
+
+Linker script and memory map
+
+LOAD ./source/CMSIS/CM1/DeviceSupport/MDR1986VE1T/startup/gcc/startup_MDR1986VE1T.o
+LOAD ./source/CMSIS/CM1/DeviceSupport/MDR1986VE1T/startup/system_MDR1986VE1T.o
+LOAD ./source/LOADER.o
+START GROUP
+LOAD c:/program files (x86)/gnu tools arm embedded/4.9 2015q3/bin/../lib/gcc/arm-none-eabi/4.9.3/armv6-m\libgcc.a
+LOAD c:/program files (x86)/gnu tools arm embedded/4.9 2015q3/bin/../lib/gcc/arm-none-eabi/4.9.3/../../../../arm-none-eabi/lib/armv6-m\libc_nano.a
+END GROUP
+START GROUP
+LOAD c:/program files (x86)/gnu tools arm embedded/4.9 2015q3/bin/../lib/gcc/arm-none-eabi/4.9.3/armv6-m\libgcc.a
+LOAD c:/program files (x86)/gnu tools arm embedded/4.9 2015q3/bin/../lib/gcc/arm-none-eabi/4.9.3/../../../../arm-none-eabi/lib/armv6-m\libc_nano.a
+END GROUP
+
+.text           0x20100000      0x620
+ *(.isr_vector)
+ .isr_vector    0x20100000       0xc0 ./source/CMSIS/CM1/DeviceSupport/MDR1986VE1T/startup/gcc/startup_MDR1986VE1T.o
+                0x20100000                __isr_vector
+ *(.text*)
+ .text          0x201000c0       0x60 ./source/CMSIS/CM1/DeviceSupport/MDR1986VE1T/startup/gcc/startup_MDR1986VE1T.o
+                0x201000c0                Reset_Handler
+                0x2010011c                ARINC429T2_IRQHandler
+                0x2010011c                HardFault_Handler
+                0x2010011c                SysTick_Handler
+                0x2010011c                EXT_INT1_IRQHandler
+                0x2010011c                PendSV_Handler
+                0x2010011c                NMI_Handler
+                0x2010011c                UART1_IRQHandler
+                0x2010011c                CAN1_IRQHandler
+                0x2010011c                POWER_IRQHandler
+                0x2010011c                BUSY_IRQHandler
+                0x2010011c                Timer3_IRQHandler
+                0x2010011c                MIL_STD_1553B1_IRQHandler
+                0x2010011c                BKP_IRQHandler
+                0x2010011c                ARINC429T4_IRQHandler
+                0x2010011c                UART2_IRQHandler
+                0x2010011c                SSP3_IRQHandler
+                0x2010011c                Timer2_IRQHandler
+                0x2010011c                EXT_INT2_IRQHandler
+                0x2010011c                ARINC429R_IRQHandler
+                0x2010011c                Default_Handler
+                0x2010011c                ADC_IRQHandler
+                0x2010011c                SSP1_IRQHandler
+                0x2010011c                USB_IRQHandler
+                0x2010011c                Timer1_IRQHandler
+                0x2010011c                EXT_INT3_IRQHandler
+                0x2010011c                ARINC429T3_IRQHandler
+                0x2010011c                EXT_INT4_IRQHandler
+                0x2010011c                SVC_Handler
+                0x2010011c                ARINC429T1_IRQHandler
+                0x2010011c                WWDG_IRQHandler
+                0x2010011c                MIL_STD_1553B2_IRQHandler
+                0x2010011c                SSP2_IRQHandler
+                0x2010011c                DMA_IRQHandler
+                0x2010011c                CAN2_IRQHandler
+                0x2010011c                Timer4_IRQHandler
+                0x2010011c                ETHERNET_IRQHandler
+ .text.SystemCoreClockUpdate
+                0x20100120       0xcc ./source/CMSIS/CM1/DeviceSupport/MDR1986VE1T/startup/system_MDR1986VE1T.o
+                0x20100120                SystemCoreClockUpdate
+ .text.SystemInit
+                0x201001ec       0x4c ./source/CMSIS/CM1/DeviceSupport/MDR1986VE1T/startup/system_MDR1986VE1T.o
+                0x201001ec                SystemInit
+ .text.upause   0x20100238       0x40 ./source/LOADER.o
+                0x20100238                upause
+ .text.eeprom_erase
+                0x20100278       0xc0 ./source/LOADER.o
+                0x20100278                eeprom_erase
+ .text.eeprom_write_block
+                0x20100338      0x11c ./source/LOADER.o
+                0x20100338                eeprom_write_block
+ .text.main     0x20100454       0xa8 ./source/LOADER.o
+                0x20100454                main
+ .text          0x201004fc      0x120 c:/program files (x86)/gnu tools arm embedded/4.9 2015q3/bin/../lib/gcc/arm-none-eabi/4.9.3/armv6-m\libgcc.a(_udivsi3.o)
+                0x201004fc                __aeabi_uidiv
+                0x201004fc                __udivsi3
+                0x20100608                __aeabi_uidivmod
+ .text          0x2010061c        0x4 c:/program files (x86)/gnu tools arm embedded/4.9 2015q3/bin/../lib/gcc/arm-none-eabi/4.9.3/armv6-m\libgcc.a(_dvmd_tls.o)
+                0x2010061c                __aeabi_idiv0
+                0x2010061c                __aeabi_ldiv0
+ *(.init)
+ *(.fini)
+ *crtbegin.o(.ctors)
+ *crtbegin?.o(.ctors)
+ *(EXCLUDE_FILE(*crtend.o *crtend?.o) .ctors)
+ *(SORT(.ctors.*))
+ *(.ctors)
+ *crtbegin.o(.dtors)
+ *crtbegin?.o(.dtors)
+ *(EXCLUDE_FILE(*crtend.o *crtend?.o) .dtors)
+ *(SORT(.dtors.*))
+ *(.dtors)
+ *(.rodata*)
+ *(.eh_frame*)
+
+.glue_7         0x20100620        0x0
+ .glue_7        0x00000000        0x0 linker stubs
+
+.glue_7t        0x20100620        0x0
+ .glue_7t       0x00000000        0x0 linker stubs
+
+.vfp11_veneer   0x20100620        0x0
+ .vfp11_veneer  0x00000000        0x0 linker stubs
+
+.v4_bx          0x20100620        0x0
+ .v4_bx         0x00000000        0x0 linker stubs
+
+.iplt           0x20100620        0x0
+ .iplt          0x00000000        0x0 ./source/CMSIS/CM1/DeviceSupport/MDR1986VE1T/startup/gcc/startup_MDR1986VE1T.o
+
+.rel.dyn        0x20100620        0x0
+ .rel.iplt      0x00000000        0x0 ./source/CMSIS/CM1/DeviceSupport/MDR1986VE1T/startup/gcc/startup_MDR1986VE1T.o
+
+.ARM.extab
+ *(.ARM.extab* .gnu.linkonce.armextab.*)
+                0x20100620                __exidx_start = .
+
+.ARM.exidx
+ *(.ARM.exidx* .gnu.linkonce.armexidx.*)
+                0x20100620                __exidx_end = .
+                0x20100620                . = ALIGN (0x4)
+                0x20100620                __etext = .
+
+.data           0x20000000        0x4 load address 0x20100620
+                0x20000000                __data_start__ = .
+ *(vtable)
+ *(.data*)
+ .data.SystemCoreClock
+                0x20000000        0x4 ./source/CMSIS/CM1/DeviceSupport/MDR1986VE1T/startup/system_MDR1986VE1T.o
+                0x20000000                SystemCoreClock
+                0x20000004                . = ALIGN (0x4)
+                0x20000004                PROVIDE (__preinit_array_start, .)
+ *(.preinit_array)
+                0x20000004                PROVIDE (__preinit_array_end, .)
+                0x20000004                . = ALIGN (0x4)
+                0x20000004                PROVIDE (__init_array_start, .)
+ *(SORT(.init_array.*))
+ *(.init_array)
+                0x20000004                PROVIDE (__init_array_end, .)
+                0x20000004                . = ALIGN (0x4)
+                0x20000004                PROVIDE (__fini_array_start, .)
+ *(SORT(.fini_array.*))
+ *(.fini_array)
+                0x20000004                PROVIDE (__fini_array_end, .)
+ *(.jcr*)
+                0x20000004                . = ALIGN (0x4)
+                0x20000004                __data_end__ = .
+                0x20100624                __edata = (__etext + SIZEOF (.data))
+
+.igot.plt       0x20000004        0x0 load address 0x20100624
+ .igot.plt      0x00000000        0x0 ./source/CMSIS/CM1/DeviceSupport/MDR1986VE1T/startup/gcc/startup_MDR1986VE1T.o
+
+.ramfunc        0x20100620        0x4 load address 0x20100624
+                0x20100620                __ramfunc_start__ = .
+ *(.ramfunc*)
+ .ramfunc       0x20100620        0x4 ./source/LOADER.o
+                0x20100620                ld_state
+                0x20100624                . = ALIGN (0x4)
+                0x20100624                __ramfunc_end__ = .
+
+.bss            0x20000004     0x400c load address 0x20100624
+                0x20000004                . = ALIGN (0x4)
+                0x20000004                __bss_start__ = .
+ *(.bss*)
+ *(COMMON)
+ COMMON         0x20000004     0x400c ./source/LOADER.o
+                0x20000004                ld_error
+                0x20000008                ld_write
+                0x20004010                . = ALIGN (0x4)
+                0x20004010                __bss_end__ = .
+
+.heap           0x20004010      0x400
+                0x20004010                __end__ = .
+                0x20004010                PROVIDE (end, .)
+ *(.heap*)
+ .heap          0x20004010      0x400 ./source/CMSIS/CM1/DeviceSupport/MDR1986VE1T/startup/gcc/startup_MDR1986VE1T.o
+                0x20004010                __HeapBase
+                0x20004410                __HeapLimit = .
+
+.stack_dummy    0x20004010      0x800
+ *(.stack*)
+ .stack         0x20004010      0x800 ./source/CMSIS/CM1/DeviceSupport/MDR1986VE1T/startup/gcc/startup_MDR1986VE1T.o
+                0x20008000                __StackTop = (ORIGIN (RAM) + 0x8000)
+                0x20007800                __StackLimit = (__StackTop - SIZEOF (.stack_dummy))
+                0x20008000                PROVIDE (__stack, __StackTop)
+                0x00000001                ASSERT ((__StackLimit >= __HeapLimit), region RAM overflowed with stack)
+OUTPUT(LOADER.elf elf32-littlearm)
+
+.ARM.attributes
+                0x00000000       0x2d
+ .ARM.attributes
+                0x00000000       0x1b ./source/CMSIS/CM1/DeviceSupport/MDR1986VE1T/startup/gcc/startup_MDR1986VE1T.o
+ .ARM.attributes
+                0x0000001b       0x31 ./source/CMSIS/CM1/DeviceSupport/MDR1986VE1T/startup/system_MDR1986VE1T.o
+ .ARM.attributes
+                0x0000004c       0x31 ./source/LOADER.o
+ .ARM.attributes
+                0x0000007d       0x1e c:/program files (x86)/gnu tools arm embedded/4.9 2015q3/bin/../lib/gcc/arm-none-eabi/4.9.3/armv6-m\libgcc.a(_udivsi3.o)
+ .ARM.attributes
+                0x0000009b       0x1e c:/program files (x86)/gnu tools arm embedded/4.9 2015q3/bin/../lib/gcc/arm-none-eabi/4.9.3/armv6-m\libgcc.a(_dvmd_tls.o)
+
+.comment        0x00000000       0x70
+ .comment       0x00000000       0x70 ./source/CMSIS/CM1/DeviceSupport/MDR1986VE1T/startup/system_MDR1986VE1T.o
+                                 0x71 (size before relaxing)
+ .comment       0x00000000       0x71 ./source/LOADER.o
+
+.debug_frame    0x00000000       0x20
+ .debug_frame   0x00000000       0x20 c:/program files (x86)/gnu tools arm embedded/4.9 2015q3/bin/../lib/gcc/arm-none-eabi/4.9.3/armv6-m\libgcc.a(_udivsi3.o)

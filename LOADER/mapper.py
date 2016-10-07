@@ -10,28 +10,60 @@ import re
 from shutil import copyfile
 
 DIR_SCRIPT  = '../'
-DIR_ARMCC   = './ARMCC-MDR32F9Qx/'
-DIR_GCC     = './GCC-MDR32F9Qx/'
-
 FILE_MAP    = 'LOADER.map'
 FILE_BINARY = 'LOADER.bin'
 FILE_SCRIPT = 'JFlash.py'
 
-VARIABLES = (
-    'LD_COMPILER',
-    'LD_START',
-    'LD_STACK',
-    'LD_IFACE',
-    'LD_IFACE_SZ',
-    'LD_RTT'
-)
+MCU_DICT = { 'F1': 'MDR32F1, 1986BE1', 'F3': 'MDR32F3, 1986BE3', 'F9': 'MDR32F9Qx, 1986BE9x' }
+
+if ( len( sys.argv ) < 2 ) or ( sys.argv[ 1 ].upper() not in MCU_DICT ):
+    sys.exit( '''
+Usage: {0} ({1}|{2}|{3})
+{1} - %({1})s
+{2} - %({2})s
+{3} - %({3})s'''.format( os.path.basename(__file__), *MCU_DICT.keys()) % MCU_DICT )
+
+MCU = sys.argv[ 1 ].upper()
+MCU_F9Qx = MCU == 'F9'
+
+if MCU_F9Qx:
+    DIR_ARMCC  = './ARMCC-MDR32F9Qx/'
+    DIR_GCC    = './GCC-MDR32F9Qx/'
+    FILE_BIN_R = 'LOADER_F9Qx.bin'
+
+    VARIABLES  = (
+        'LD_COMPILER_F9Qx',
+        'LD_START_F9Qx',
+        'LD_STACK_F9Qx',
+        'LD_WRITE_F9Qx',
+        'LD_WRITE_SZ_F9Qx',
+        'LD_STATE_F9Qx',
+        'LD_ERROR_F9Qx',
+        'LD_RTT_F9Qx'
+    )
+else:
+    DIR_ARMCC  = './ARMCC-MDR32F1/'
+    DIR_GCC    = './GCC-MDR32F1/'
+    FILE_BIN_R = 'LOADER_F1.bin'
+
+    VARIABLES  = (
+        'LD_COMPILER_F1',
+        'LD_START_F1',
+        'LD_STACK_F1',
+        'LD_WRITE_F1',
+        'LD_WRITE_SZ_F1',
+        'LD_STATE_F1',
+        'LD_ERROR_F1',
+        'LD_RTT_F1'
+    )
 
 CC_LIST = ( 'ARMCC', 'GCC' )
 
-if ( len( sys.argv ) < 2 ) or ( sys.argv[ 1 ].upper() not in CC_LIST ):
-    sys.exit( 'Usage: %s (%s|%s)' % ( os.path.basename(__file__), CC_LIST[ 0 ], CC_LIST[ 1 ]))
-
-CC = CC_LIST.index( sys.argv[ 1 ].upper())
+# -- no compiler choice since 0.7, gcc only
+#   if ( len( sys.argv ) < 2 ) or ( sys.argv[ 1 ].upper() not in CC_LIST ):
+#       sys.exit( 'Usage: %s (%s|%s)' % ( os.path.basename(__file__), CC_LIST[ 0 ], CC_LIST[ 1 ]))
+#   CC = CC_LIST.index( sys.argv[ 1 ].upper())
+CC = 1
 
 if CC == 0:
     DIR_BINARY = DIR_ARMCC
@@ -46,12 +78,25 @@ RE_LIST = (
     '',
     RE_ADDR % ( 'Reset_Handler' ),
     RE_ADDR % ( '__initial_sp' if CC == 0 else '__StackTop' ),
-    RE_ADDR % ( 'iface' ),
-    RE_SIZE % ( 'iface' ),
+    RE_ADDR % ( 'ld_write' ),
+    RE_SIZE % ( 'ld_write' ),
+    RE_ADDR % ( 'ld_state' ),
+    RE_ADDR % ( 'ld_error' ),
     RE_ADDR % ( '_SEGGER_RTT' )
 )
 
 RE_VAR = r'^(%s\s*=\s*)(0x[0-9a-fA-F]+|[0-9]+)(.*)'
+
+DEFAULTS = (
+    None,
+    None,
+    None,
+    None,
+    None,
+    None,
+    None,
+    '0'
+)
 
 os.chdir( os.path.dirname( os.path.realpath( __file__ )))
 fn_binary = DIR_BINARY + FILE_BINARY
@@ -76,9 +121,13 @@ for ln in MAP:
 
 error = False
 for i, ex in enumerate( RE_LIST ):
-    if not values[ i ]:
-        sys.stderr.write( 'ERROR: "%s" not found! (%s)\n' % ( ex, fn_map ))
-        error = True
+    if values[ i ] is None:
+        if DEFAULTS[ i ] is None:
+            sys.stderr.write( 'ERROR: "%s" not found! (%s)\n' % ( ex, fn_map ))
+            error = True
+        else:
+            sys.stderr.write( 'WARNING: "%s" not found! (%s)\n' % ( ex, fn_map ))
+            values[ i ] = DEFAULTS[ i ]
 
 if error:
     sys.exit( 1 )
@@ -101,6 +150,6 @@ for i, var in enumerate( VARIABLES ):
 
 sys.stderr.write( '\nCopy "%s"\n' % fn_binary )
 
-copyfile( fn_binary, FILE_BINARY )
+copyfile( fn_binary, FILE_BIN_R )
 
 sys.stderr.write( '\nDone\n' )

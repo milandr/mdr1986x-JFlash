@@ -6,20 +6,53 @@
  *  \copyright  See the LICENSE file.
  */
 
-#define VERSION  "0.6"
+#define VERSION  "0.7"
 
+#if defined   ( USE_MDR1986VE9x )
 #include "MDR32Fx.h"
-#include "MDR32F9Qx_rst_clk.h"
 #include "SEGGER_RTT.h"
+
+#define  AHB_RAM
+
+#define init_print()  SEGGER_RTT_ConfigUpBuffer( 0, 0, 0, 0, SEGGER_RTT_MODE_NO_BLOCK_SKIP )
+#define _print( msg )  SEGGER_RTT_WriteString( 0, msg )
+#define _printf( msg, ... )  SEGGER_RTT_printf( 0, msg, ## __VA_ARGS__ )
+
+#elif defined ( USE_MDR1986VE1T )
+#include "MDR1986VE1T.h"
+
+#define  AHB_RAM  __attribute__((section(".ramfunc")))
+
+#define init_print()
+#define _print( msg )
+#define _printf( msg, ... )
+#endif
+
+#include "MDR32F9Qx_rst_clk.h"
 
 typedef uint32_t EEPROM_WORD;
 
-#define EEPROM_SIZE  ( 32 * EEPROM_PAGE_SIZE )
-
-/* Interface to JFlash script */
-struct {
-
+#define EEPROM_SIZE     ( 32 * EEPROM_PAGE_SIZE )
 #define BLOCK_SIZE      0x4000
+
+/* LOADER running command or state */
+#define START           0
+#define ERASE           1
+#define WRITE_BLOCK     2
+#define IDLE            (( uint32_t ) -1 )
+
+AHB_RAM uint32_t ld_state;
+
+/* LOADER error */
+#define ERR_NONE        0
+#define ERR_ADDR        1
+#define ERR_ADDR_ALIGN  2
+#define ERR_ADDR_END    3
+
+uint32_t ld_error;
+
+/* EEPROM writing data */
+struct {
 	/* Incoming data buffer */
 	EEPROM_WORD data[ BLOCK_SIZE / EEPROM_WORD_SIZE ];
 
@@ -28,22 +61,7 @@ struct {
 
 	/* Incoming data length (in EEPROM_WORD) */
 	uint32_t len;
-
-#define START           0
-#define ERASE           1
-#define WRITE_BLOCK     2
-#define IDLE            (( uint32_t ) -1 )
-	/* LOADER running command or state */
-	uint32_t state;
-
-#define ERR_NONE        0
-#define ERR_ADDR        1
-#define ERR_ADDR_ALIGN  2
-#define ERR_ADDR_END    3
-	/* Last error */
-	uint32_t err;
-
-} iface;
+} ld_write;
 
 #define __CRLF__  "\r\n"
 
@@ -56,7 +74,7 @@ void upause( uint32_t val )
 
 void eeprom_erase( void )
 {
-	SEGGER_RTT_WriteString( 0, "eeprom_erase()"__CRLF__ );
+	_print( "eeprom_erase()"__CRLF__ );
 
 	__disable_irq();
 	MDR_EEPROM->KEY  = EEPROM_KEY;
@@ -79,25 +97,25 @@ void eeprom_erase( void )
 	upause( 1 );
 	__enable_irq();
 
-	SEGGER_RTT_WriteString( 0, "ok"__CRLF__ );
+	_print( "ok"__CRLF__ );
 }
 
 uint32_t eeprom_write_block( uint32_t addr, EEPROM_WORD *data, uint32_t len )
 {
-	SEGGER_RTT_printf( 0, "eeprom_write_block( 0x%x, 0x%x, 0x%x )"__CRLF__, addr, data, len );
+	_printf( "eeprom_write_block( 0x%x, 0x%x, 0x%x )"__CRLF__, addr, data, len );
 
 	if ( addr < EEPROM_ADDRESS ) {
-		SEGGER_RTT_printf( 0, "ERROR: Wrong EERPOM address (0x%x)."__CRLF__, addr );
+		_printf( "ERROR: Wrong EERPOM address (0x%x)."__CRLF__, addr );
 
 		return ERR_ADDR;
 	}
 	if (( addr & 3 ) != 0 ) {
-		SEGGER_RTT_printf( 0, "ERROR: Wrong EERPOM address alignment (0x%x)."__CRLF__, addr );
+		_printf( "ERROR: Wrong EERPOM address alignment (0x%x)."__CRLF__, addr );
 
 		return ERR_ADDR_ALIGN;
 	}
 	if ( addr + len * EEPROM_WORD_SIZE > EEPROM_ADDRESS + EEPROM_SIZE ) {
-		SEGGER_RTT_printf( 0, "ERROR: Wrong EERPOM address (0x%x)."__CRLF__, addr + len * EEPROM_WORD_SIZE );
+		_printf( "ERROR: Wrong EERPOM address (0x%x)."__CRLF__, addr + len * EEPROM_WORD_SIZE );
 
 		return ERR_ADDR_END;
 	}
@@ -129,7 +147,7 @@ uint32_t eeprom_write_block( uint32_t addr, EEPROM_WORD *data, uint32_t len )
 	upause( 1 );
 	__enable_irq();
 
-	SEGGER_RTT_WriteString( 0, "ok"__CRLF__ );
+	_print( "ok"__CRLF__ );
 
 	return ERR_NONE;
 }
@@ -139,32 +157,29 @@ int main( void )
 	NVIC->ICER[ 0 ] = 0xFFFFFFFF;  /* Disable all interrupts */
 	NVIC->ICPR[ 0 ] = 0xFFFFFFFF;  /* Reset all interrupts */
 
-	MDR_RST_CLK->PER_CLOCK = RST_CLK_PCLK_PORTB | RST_CLK_PCLK_PORTD | RST_CLK_PCLK_BKP | RST_CLK_PCLK_RST_CLK
-	| RST_CLK_PCLK_EEPROM;
-
+	MDR_RST_CLK->PER_CLOCK |= RST_CLK_PCLK_PORTB | RST_CLK_PCLK_PORTD | RST_CLK_PCLK_EEPROM;
 	MDR_EEPROM->CMD = ( 3 << EEPROM_CMD_DELAY_Pos );  /* Set EEPROM delay */
 
-	SEGGER_RTT_ConfigUpBuffer( 0, 0, 0, 0, SEGGER_RTT_MODE_BLOCK_IF_FIFO_FULL );
-	SEGGER_RTT_WriteString( 0, __CRLF__"MCU MDR32F9Qx EEPROM LOADER " VERSION __CRLF__ __CRLF__ );
-	SEGGER_RTT_printf( 0, "data buffer at 0x%x"__CRLF__, &iface.data );
+	init_print();
+	_print( __CRLF__"MCU MDR32F9Qx EEPROM LOADER " VERSION __CRLF__ __CRLF__ );
 
-	iface.err = ERR_NONE;
-	iface.state = IDLE;
+	ld_error = ERR_NONE;
+	ld_state = IDLE;
 
 	while ( 1 ) {
-		switch ( iface.state ) {
+		switch ( ld_state ) {
 
 		/* EEPROM erasing */
 		case ERASE:
 			eeprom_erase();
-			iface.err = ERR_NONE;
-			iface.state = IDLE;
+			ld_error = ERR_NONE;
+			ld_state = IDLE;
 			break;
 
 		/* EEPROM writing */
 		case WRITE_BLOCK:
-			iface.err = eeprom_write_block( iface.addr, iface.data, iface.len );
-			iface.state = IDLE;
+			ld_error = eeprom_write_block( ld_write.addr, ld_write.data, ld_write.len );
+			ld_state = IDLE;
 			break;
 		}
 	}
