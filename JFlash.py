@@ -11,7 +11,7 @@ See the LICENSE file.
 """
 
 APP               = 'JFlash'
-VERSION           = '0.7.0'
+VERSION           = '0.7.1'
 
 #  Write CRC-32 of binary file right after the image in EEPROM
 CRC32_WRITING     = True
@@ -123,10 +123,12 @@ def reg( r ):
 
 #  Write register
 def set_reg( r, val ):
-    return execute( 'set $%s = %d' % ( r, val ))
+    #  BUG!? With JLink V6.10g, command `set $MSP = val` doesn't work properly for CM1.
+    return monitor( 'reg %s = %d' % ( r, val ))
 
 #  Upload binary data form file to memory
-#  This command does not allow to quote the filename with "", so you can NOT use space characters in the filename.
+#  This command does not allow to quote the filename with "",
+#  so you can NOT use space characters in the filename.
 def load_binary( fn, offset, start=None, end=None ):
     st = 'restore %s binary %d' % ( fn, offset )
     if start is not None:
@@ -136,7 +138,8 @@ def load_binary( fn, offset, start=None, end=None ):
     return execute( st )
 
 #  Save data form memory to dump file
-#  This command does not allow to quote the filename with "", so you can NOT use space characters in the filename.
+#  This command does not allow to quote the filename with "",
+#  so you can NOT use space characters in the filename.
 def dump_binary( fn, offset, l ):
     return execute( 'dump binary memory %s %d %d' % ( fn, offset, offset + l ))
 
@@ -173,8 +176,7 @@ def verify( offset, binary, binary_sz ):
 
     return filecmp.cmp( binary, dump )
 
-
-# # # #  MAIN SCRIPT  # # # #
+# # # # # # # #  MAIN SCRIPT  # # # # # # # #
 
 def program( binary ):
     log.info( '%s %s', APP, VERSION )
@@ -285,7 +287,7 @@ def program( binary ):
 
     if not MCU_F9Qx:
         #  Workaround MDR32F1 BUG 0007, we need to renew EEPROM cache...
-        mem32( crc32_addr )
+        mem32( EEPROM_START + 0x2000 )
 
     #  Check very first DWORD (32 bit)
     if mem32( EEPROM_START ) != 0xFFFFFFFF:
@@ -334,7 +336,7 @@ def program( binary ):
 
     if not MCU_F9Qx:
         #  Workaround MDR32F1 BUG 0007, we need to renew EEPROM cache...
-        mem32( crc32_addr )
+        mem32( EEPROM_START + 0x2000 )
 
     if not verify( EEPROM_START, binary, binary_sz ):
         log.error( 'Binary file does NOT match with EEPROM content.' )
@@ -383,6 +385,7 @@ def program( binary ):
 
     return True
 
+# # # # # # # #  WRAPPERS  # # # # # # # #
 
 #  Wrapper for program EEPROM from GNU ARM Eclipse
 def program_from_eclipse( binary ):
@@ -425,7 +428,6 @@ def program_from_shell( binary ):
 
     log.removeHandler( h )
     return result
-
 
 #  GDB "load" command
 class LoadCommand( gdb.Command ):
