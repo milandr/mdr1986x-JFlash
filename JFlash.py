@@ -11,7 +11,7 @@ See the LICENSE file.
 """
 
 APP               = 'JFlash'
-VERSION           = '0.7.1'
+VERSION           = '0.7.2'
 
 #  Write CRC-32 of binary file right after the image in EEPROM
 CRC32_WRITING     = True
@@ -23,6 +23,7 @@ PORT              = 2331
 LOADER_F9Qx       = 'LOADER/LOADER_F9Qx.bin'
 LOADER_F1         = 'LOADER/LOADER_F1.bin'
 DUMP              = 'dump.bin'
+OBJCOPY           = 'arm-none-eabi-objcopy'
 
 #  LOADER layout (according to MAP file)
 #  NOTE: Use 'mapper.py' if you need to update the following definitions.
@@ -180,6 +181,13 @@ def verify( offset, binary, binary_sz ):
 
 def program( binary ):
     log.info( '%s %s', APP, VERSION )
+
+    p, e = os.path.splitext( binary )
+    if e == '.elf':
+        log.info( 'ELF to binary converting...' )
+        elf = binary
+        binary = p + '.bin'
+        os.system( '%s -O binary %s %s' % ( OBJCOPY, elf, binary ))
 
     if not os.path.exists( binary ):
         log.error( 'Binary file not found (%s).', binary )
