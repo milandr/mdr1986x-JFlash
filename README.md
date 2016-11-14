@@ -70,6 +70,8 @@ In the debugger launch configuration `GDB SEGGER J-Link Debugging → Debugger`,
 Also, in `GDB SEGGER J-Link Debugging → Startup`, you should select
 `Load Symbols and Executable → Load Executable → Use file:`, and add the name of
 [raw binary file](http://gnuarmeclipse.github.io/plugins/features/#extra-build-steps).
+If you select ELF file to load, the script will try to convert it into raw binary using
+`arm-none-eabi-objcopy`.
 
 ![screenshot](doc/pic/README_02.png)
 
