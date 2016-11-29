@@ -11,7 +11,7 @@ See the LICENSE file.
 """
 
 APP               = 'JFlash'
-VERSION           = '0.7.3'
+VERSION           = '0.7.4'
 
 #  Write CRC-32 of binary file right after the image in EEPROM
 CRC32_WRITING     = True
@@ -114,7 +114,7 @@ def monitor( st ):
 def mem32( addr ):
     ret = execute( 'x ' + str( addr ))
     try:
-        return long( ret.split( ':' )[ 1 ].strip(), 16 )
+        return long( ret.split( ':' )[ -1 ].strip(), 16 )
 
     except ValueError:
         log.error( 'Fail to read DWORD at %#x (%s).', addr, ret )
