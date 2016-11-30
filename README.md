@@ -35,6 +35,14 @@ in `JFlash` installation path.
 
 It hasn't been tested on Linux yet...
 
+<!-- MarkdownTOC autolink="true" bracket="round" depth=0 style="unordered" autoanchor="false" -->
+
+- [How to program EEPROM using GNU toolchain](#how-to-program-eeprom-using-gnu-toolchain)
+- [How to debug using GNU ARM Eclipse](#how-to-debug-using-gnu-arm-eclipse)
+- [How to check the program integrity in EEPROM at runtime](#how-to-check-the-program-integrity-in-eeprom-at-runtime)
+
+<!-- /MarkdownTOC -->
+
 #### How to program EEPROM using GNU toolchain
 
 - Install [SEGGER J-Link Software](https://www.segger.com/jlink-software.html) (tested with `5.10`-`5.12`,`6.10`).
@@ -82,3 +90,8 @@ to launch RTT client you can uncomment it in the batch file.
 
 At the end, if the mapfile of our binary exists, `JFlash.py` sets the address of RTT structure,
 and you are able to interact with loaded binary using the same RTT client.
+
+#### How to check the program integrity in EEPROM at runtime
+
+The `JFlash.py` script writes CRC-32 of binary file right after (aligned(4)) the image in EEPROM,
+it should be compared with CRC-32 calculated by the program.
