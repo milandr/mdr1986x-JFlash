@@ -35,6 +35,8 @@ in `JFlash` installation path.
 
 It hasn't been tested on Linux yet...
 
+## How to...
+
 <!-- MarkdownTOC autolink="true" bracket="round" depth=0 style="unordered" autoanchor="false" -->
 
 - [How to program EEPROM using GNU toolchain](#how-to-program-eeprom-using-gnu-toolchain)
