@@ -26,7 +26,8 @@ only with native drivers.
 #### How does it work?
 
 - LOADER (RAMCode) implements EEPROM programming algorithm.
-- GDB script on Python (`JFlash.py`) redefines the GDB `load` command.
+- GDB script on [Python](https://sourceware.org/gdb/current/onlinedocs/gdb/Python.html) (`JFlash.py`) redefines
+  the GDB `load` command.
 
 #### Any limits?
 
@@ -47,10 +48,10 @@ It hasn't been tested on Linux yet...
 
 #### How to program EEPROM using GNU toolchain
 
-- Install [SEGGER J-Link Software](https://www.segger.com/jlink-software.html) (tested with `5.10`-`6.12`).
+- Install [SEGGER J-Link Software](https://www.segger.com/jlink-software.html) (tested with `5.10`..`6.12`).
 - Install [GNU toolchain](https://launchpad.net/gcc-arm-embedded) (tested with `4.9-2015-q3`).
 - Install Python 2.7 and set `PYTHON_PATH` and `PYTHON_LIB` environment variables.
-- You may need to configure `PATH` environment variable.
+- You may need to add GNU toolchain path into `PATH` environment variable.
 
 To program EEPROM, run the command:
 ```
