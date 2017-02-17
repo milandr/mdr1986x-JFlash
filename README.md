@@ -88,11 +88,13 @@ If you select ELF file to load, the script will try to convert it into raw binar
 
 The `JFlash.py` script redefines GDB `load` command, so when Eclipse calls `load`, the script runs instead.
 
-The script creates `JFlash.log` in the folder of the current project, also LOADER prints trace into RTT,
-to launch RTT client you can uncomment it in the batch file.
+The script creates `JFlash.log` in the folder of the current project, also LOADER prints trace into RTT.
+To launch RTT client (terminal) you can uncomment it in the batch file.
 
 At the end, if the mapfile of our binary exists, `JFlash.py` sets the address of RTT structure,
-and you are able to interact with loaded binary using the same RTT client.
+and you are able to interact with loaded binary using RTT client.
+[Here](https://github.com/in4lio/mdr1986x-pack-repo/tree/master/source/Example_Projects_Eclipse/mdr1986x_RTT)
+is an example of RTT using.
 
 #### How to check the program integrity in EEPROM at runtime
 
