@@ -8,7 +8,7 @@ using [GNU ARM Eclipse](http://gnuarmeclipse.github.io/)
 with native [SEGGER J-Link drivers](https://www.segger.com/jlink-software.html).
 - Internal EEPROM programming using [GNU toolchain](https://launchpad.net/gcc-arm-embedded).
 
-Supported microcontrollers: 1986BE9x (MDR32F9Qx), 1986BE1 (MDR32F1), 1986BE3 (MDR32F3).
+Supported microcontrollers: 1986BE9x (MDR32F9Qx), 1986BE1 (MDR32F1), 1986BE3.
 
 #### What's the problem?
 
