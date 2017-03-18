@@ -25,12 +25,12 @@ only with native drivers.
 #### How does it work?
 
 - LOADER (RAMCode) implements EEPROM programming algorithm.
-- GDB script on [Python](https://sourceware.org/gdb/current/onlinedocs/gdb/Python.html) (`JFlash.py`) redefines
+- GDB script on [Python](https://sourceware.org/gdb/current/onlinedocs/gdb/Python.html) `JFlash.py` redefines
   the GDB `load` command.
 
 #### Any limits?
 
-__Windows__: Some GDB commands do not allow to quote filenames with `""`, so you can NOT use space characters
+__Windows__: Some GDB commands do not allow to quote filenames within `""`, so you can NOT use space characters
 in `JFlash` installation path.
 
 It hasn't been tested on Linux yet...
