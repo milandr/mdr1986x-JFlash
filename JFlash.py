@@ -6,12 +6,12 @@ http://github.com/in4lio/mdr1986x-JFlash/
 
 Usage: gdb-py --batch -x JFlash.py -ex "py program_from_shell(<bin_file>)"
 
-Copyright (c) 2016 Vitaly Kravtsov (in4lio@gmail.com)
+Copyright (c) 2016,2017 Vitaly Kravtsov (in4lio@gmail.com)
 See the LICENSE file.
 """
 
 APP               = 'JFlash'
-VERSION           = '0.7.4'
+VERSION           = '0.7.5'
 
 #  Write CRC-32 of binary file right after the image in EEPROM
 CRC32_WRITING     = True
@@ -114,7 +114,7 @@ def monitor( st ):
 def mem32( addr ):
     ret = execute( 'x ' + str( addr ))
     try:
-        return long( ret.split( ':' )[ -1 ].strip(), 16 )
+        return long( ret.splitlines()[ 0 ].split( ':' )[ -1 ].strip(), 16 )
 
     except ValueError:
         log.error( 'Fail to read DWORD at %#x (%s).', addr, ret )
@@ -283,9 +283,10 @@ def program( binary ):
     if LD_RTT:
         monitor( 'exec SetRTTAddr ' + hex( LD_RTT ))
     monitor( 'go' )
+    sleep( 0.1 )
 
     #  Check LOADER is started
-    sleep( 0.1 )
+    monitor( 'halt' )
     if mem32( LD_STATE ) != IDLE:
         log.error( 'LOADER is not running.' )
         return False
@@ -293,7 +294,6 @@ def program( binary ):
     # # # #  ERASE EEPROM  # # # #
 
     log.info( 'EEPROM erasing...' )
-    monitor( 'halt' )
     set_mem32( LD_STATE, ERASE )
     monitor( 'go' )
 
