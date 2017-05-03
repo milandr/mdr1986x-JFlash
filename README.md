@@ -2,7 +2,7 @@
 
 #### What's this project for?
 
-- Debugging on [Milandr 32-bit Cortex-М MCU](http://milandr.ru/en/index.php?mact=Products,cntnt01,default,0&cntnt01hierarchyid=5&cntnt01returnid=141)
+- Debugging on [Milandr 32-bit Cortex-М MCU](http://ic.milandr.ru/products/mikrokontrollery_i_protsessory/32_razryadnye_mikrokontrollery/)
 using [GNU ARM Eclipse](http://gnuarmeclipse.github.io/)
 with native [SEGGER J-Link drivers](https://www.segger.com/jlink-software.html).
 - Internal EEPROM programming using [GNU toolchain](https://launchpad.net/gcc-arm-embedded).
@@ -16,8 +16,9 @@ Unfortunately, SEGGER still knows nothing about EEPROM programming algorithm for
 As a result you cannot use the native J-Flash utility. Moreover, you had to use [OpenOCD](http://openocd.org/)
 instead of native drivers for debugging with GNU ARM Eclipse.
 
-OpenOCD is quite good, but at present, slightly less functional, for example, [OpenOCD debugging Eclipse plug-in]
-(http://gnuarmeclipse.github.io/debug/openocd/) does not support capturing of Serial Wire Output (SWO).
+OpenOCD is quite good, but at present, slightly less functional, for example,
+[OpenOCD debugging Eclipse plug-in](http://gnuarmeclipse.github.io/debug/openocd/)
+does not support capturing of Serial Wire Output (SWO).
 
 Also you are able to use SEGGER [Real Time Transfer](https://www.segger.com/jlink-rtt.html) (RTT)
 only with native drivers.
