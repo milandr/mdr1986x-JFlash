@@ -18,10 +18,10 @@ instead of native drivers for debugging with GNU ARM Eclipse.
 
 OpenOCD is quite good, but at present, slightly less functional, for example,
 [OpenOCD debugging Eclipse plug-in](http://gnuarmeclipse.github.io/debug/openocd/)
-does not support capturing of Serial Wire Output (SWO).
+does not support a capturing of Serial Wire Output (SWO).
 
 Also you are able to use SEGGER [Real Time Transfer](https://www.segger.com/jlink-rtt.html) (RTT)
-only with native drivers.
+only with the native drivers.
 
 #### How does it work?
 
@@ -34,7 +34,7 @@ only with native drivers.
 __Windows__: Some GDB commands do not allow to quote filenames within `""`, so you can NOT use space characters
 in `JFlash` installation path.
 
-It hasn't been tested on Linux yet...
+It has not been tested on Linux yet...
 
 ## How to...
 
@@ -51,10 +51,10 @@ It hasn't been tested on Linux yet...
 - Install [SEGGER J-Link Software](https://www.segger.com/jlink-software.html) (tested with `5.10`..`6.12`).
 - Install [GNU toolchain](https://launchpad.net/gcc-arm-embedded) (tested with `4.9-2015-q3`).
 - Install Python 2.7 ([32 bit](https://answers.launchpad.net/gcc-arm-embedded/+faq/2601)) and
-  set `PYTHONHOME` and `PYTHONPATH` [environment variables](https://docs.python.org/2/using/cmdline.html#environment-variables).
-- You may need to add GNU toolchain path into `PATH` environment variable.
+  set `PYTHONHOME` and `PYTHONPATH` environment variables ([read more](https://docs.python.org/2/using/cmdline.html#environment-variables)).
+- You may need to add GNU toolchain path into `PATH` environment variable manually.
 
-To program EEPROM, run the command:
+To program EEPROM you have to run the next command:
 ```
 JFlash.bat <BIN_FILE>
 ```
@@ -80,24 +80,23 @@ In the debugger launch configuration `GDB SEGGER J-Link Debugging → Debugger`,
 ![screenshot](doc/pic/README_01.png)
 
 Also, in `GDB SEGGER J-Link Debugging → Startup`, you should select
-`Load Symbols and Executable → Load Executable → Use file:`, and add the name of
+`Load Symbols and Executable → Load Executable → Use file`, and add the name of
 [raw binary file](http://gnuarmeclipse.github.io/plugins/features/#extra-build-steps).
-If you select ELF file to load, the script will try to convert it into raw binary using
+If you select an ELF file for loading, the script will try to convert it into the raw binary using
 `arm-none-eabi-objcopy`.
 
 ![screenshot](doc/pic/README_02.png)
 
 The `JFlash.py` script redefines GDB `load` command, so when Eclipse calls `load`, the script runs instead.
 
-The script creates `JFlash.log` in the folder of the current project, also LOADER prints trace into RTT.
-To launch RTT client (terminal) you can uncomment it in the batch file.
+The script creates `JFlash.log` in the folder of the current project, also LOADER prints a trace into RTT.
+To launch RTT client (terminal) you should uncomment it in the batch file.
 
 At the end, if the mapfile of our binary exists, `JFlash.py` sets the address of RTT structure,
 and you are able to interact with loaded binary using RTT client.
-[Here](https://github.com/in4lio/mdr1986x-pack-repo/tree/master/source/Example_Projects_Eclipse/mdr1986x_RTT)
-is an example of RTT using.
+There is an example of RTT usage into [`mdr1986x_RTT`](https://github.com/in4lio/mdr1986x-pack-repo/tree/master/source/Example_Projects_Eclipse/mdr1986x_RTT) project.
 
 #### How to check the program integrity in EEPROM at runtime
 
-The `JFlash.py` script writes CRC-32 of binary file right after (aligned(4)) the image in EEPROM,
-it should be compared with CRC-32 calculated by the program.
+The `JFlash.py` script writes CRC-32 of the binary file (`aligned(4)`) right after the image in EEPROM,
+it could be compared with CRC-32 that is being calculated by the program.
