@@ -7,7 +7,7 @@ using [GNU ARM Eclipse](http://gnuarmeclipse.github.io/)
 with native [SEGGER J-Link drivers](https://www.segger.com/jlink-software.html).
 - Internal EEPROM programming using [GNU toolchain](https://launchpad.net/gcc-arm-embedded).
 
-Supported microcontrollers: 1986BE9x (MDR32F9Qx), 1986BE1 (MDR32F1), 1986BE3.
+Supported microcontrollers: **1986BE9x** (MDR32F9Qx), **1986BE1** (MDR32F1), **1986BE3**.
 
 #### What's the problem?
 
@@ -48,20 +48,21 @@ It has not been tested on Linux yet...
 
 #### How to program EEPROM using GNU toolchain
 
-- Install [SEGGER J-Link Software](https://www.segger.com/jlink-software.html) (tested with `5.10`..`6.12`).
-- Install [GNU toolchain](https://launchpad.net/gcc-arm-embedded) (tested with `4.9-2015-q3`).
+- Install [SEGGER J-Link Software](https://www.segger.com/jlink-software.html), tested with `5.10`..`6.12`.
+- Install [GNU toolchain](https://launchpad.net/gcc-arm-embedded), tested with `4.9-2015-q3`.
 - Install Python 2.7 ([32 bit](https://answers.launchpad.net/gcc-arm-embedded/+faq/2601)) and
-  set `PYTHONHOME` and `PYTHONPATH` environment variables ([read more](https://docs.python.org/2/using/cmdline.html#environment-variables)).
+  set [`PYTHONHOME`](https://docs.python.org/2/using/cmdline.html#environment-variables) and
+  [`PYTHONPATH`](https://docs.python.org/2/using/cmdline.html#environment-variables) environment variables.
 - You may need to add GNU toolchain path into `PATH` environment variable manually.
 
-To program EEPROM you have to run the next command:
+You have to run the next command to programming EEPROM:
 ```
 JFlash.bat <BIN_FILE>
 ```
-The batch file starts J-Link GDB server at first, then runs GDB client to execute `program_from_shell`
+This batch file starts J-Link GDB server at first, then runs GDB client to execute `program_from_shell`
 function of JFlash script with the name of
-[raw binary file](http://gnuarmeclipse.github.io/plugins/features/#extra-build-steps)
-as argument, something in this way:
+[the raw binary file](http://gnuarmeclipse.github.io/plugins/features/#extra-build-steps)
+as argument, something like this:
 ```
 start /B JLinkGDBServerCL -if swd -device "Cortex-M1" -endian little -speed 2000 -port 2331 -singlerun
 arm-none-eabi-gdb-py --batch -x JFlash.py -ex "py program_from_shell('yourapp.bin')"
@@ -79,9 +80,9 @@ In the debugger launch configuration `GDB SEGGER J-Link Debugging → Debugger`,
 
 ![screenshot](doc/pic/README_01.png)
 
-Also, in `GDB SEGGER J-Link Debugging → Startup`, you should select
+After, in `GDB SEGGER J-Link Debugging → Startup`, you should select
 `Load Symbols and Executable → Load Executable → Use file`, and add the name of
-[raw binary file](http://gnuarmeclipse.github.io/plugins/features/#extra-build-steps).
+[the raw binary file](http://gnuarmeclipse.github.io/plugins/features/#extra-build-steps).
 If you select an ELF file for loading, the script will try to convert it into the raw binary using
 `arm-none-eabi-objcopy`.
 
@@ -90,13 +91,13 @@ If you select an ELF file for loading, the script will try to convert it into th
 The `JFlash.py` script redefines GDB `load` command, so when Eclipse calls `load`, the script runs instead.
 
 The script creates `JFlash.log` in the folder of the current project, also LOADER prints a trace into RTT.
-To launch RTT client (terminal) you should uncomment it in the batch file.
+To launch RTT client (terminal) you should uncomment its call in the batch file.
 
 At the end, if the mapfile of our binary exists, `JFlash.py` sets the address of RTT structure,
-and you are able to interact with loaded binary using RTT client.
+and you are able to interact with the loaded binary using RTT client.
 There is an example of RTT usage into [`mdr1986x_RTT`](https://github.com/in4lio/mdr1986x-pack-repo/tree/master/source/Example_Projects_Eclipse/mdr1986x_RTT) project.
 
 #### How to check the program integrity in EEPROM at runtime
 
-The `JFlash.py` script writes CRC-32 of the binary file (`aligned(4)`) right after the image in EEPROM,
+The `JFlash.py` script writes CRC-32 of the binary file `aligned(4)` right after the image in EEPROM,
 it could be compared with CRC-32 that is being calculated by the program.
