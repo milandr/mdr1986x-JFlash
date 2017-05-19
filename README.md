@@ -48,12 +48,12 @@ It has not been tested on Linux yet...
 
 #### How to program EEPROM using GNU toolchain
 
-- Install [SEGGER J-Link Software](https://www.segger.com/jlink-software.html), tested with `5.10`..`6.12`.
-- Install [GNU toolchain](https://launchpad.net/gcc-arm-embedded), tested with `4.9-2015-q3`.
-- Install Python 2.7 ([32 bit](https://answers.launchpad.net/gcc-arm-embedded/+faq/2601)) and
+1. Install [SEGGER J-Link Software](https://www.segger.com/jlink-software.html), tested with `5.10`..`6.12`.
+2. Install [GNU toolchain](https://launchpad.net/gcc-arm-embedded), tested with `4.9-2015-q3`.
+3. Install Python 2.7 ([32 bit](https://answers.launchpad.net/gcc-arm-embedded/+faq/2601)) and
   set [`PYTHONHOME`](https://docs.python.org/2/using/cmdline.html#environment-variables) and
   [`PYTHONPATH`](https://docs.python.org/2/using/cmdline.html#environment-variables) environment variables.
-- You may need to add GNU toolchain path into `PATH` environment variable manually.
+4. You may need to add GNU toolchain path into `PATH` environment variable manually.
 
 You have to run the next command to programming EEPROM:
 ```
@@ -70,17 +70,17 @@ arm-none-eabi-gdb-py --batch -x JFlash.py -ex "py program_from_shell('yourapp.bi
 
 #### How to debug using GNU ARM Eclipse
 
-- Install [GNU ARM Eclipse](http://gnuarmeclipse.github.io/install/).
-- Configure [J-Link debugging Eclipse plug-in](http://gnuarmeclipse.github.io/debug/jlink/).
+1. Install [GNU ARM Eclipse](http://gnuarmeclipse.github.io/install/).
+2. Configure [J-Link debugging Eclipse plug-in](http://gnuarmeclipse.github.io/debug/jlink/).
 
-In the debugger launch configuration `GDB SEGGER J-Link Debugging → Debugger`, you should:
-- Set `"Cortex-M1"` or `"Cortex-M3"` (depends on MCU) into `J-Link GDB Server Setup → Device name`.
-- Replace `gdb` with `gdb-py` in `GDB Client Setup → Executable`.
-- Add `-x JFlash.py` into `GDB Client Setup → Other options` (use the filename with full path).
+3. Into the debugger launch configuration `GDB SEGGER J-Link Debugging → Debugger`, you should:
+  - Set `"Cortex-M1"` or `"Cortex-M3"` (depends on MCU) into `J-Link GDB Server Setup → Device name`.
+  - Replace `gdb` with `gdb-py` in `GDB Client Setup → Executable`.
+  - Add `-x JFlash.py` into `GDB Client Setup → Other options` (use the filename with full path).
 
 ![screenshot](doc/pic/README_01.png)
 
-After, in `GDB SEGGER J-Link Debugging → Startup`, you should select
+4. Into `GDB SEGGER J-Link Debugging → Startup`, you should select
 `Load Symbols and Executable → Load Executable → Use file`, and add the name of
 [the raw binary file](http://gnuarmeclipse.github.io/plugins/features/#extra-build-steps).
 If you select an ELF file for loading, the script will try to convert it into the raw binary using
