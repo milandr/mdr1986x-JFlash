@@ -74,9 +74,9 @@ arm-none-eabi-gdb-py --batch -x JFlash.py -ex "py program_from_shell('yourapp.bi
 - Configure [J-Link debugging Eclipse plug-in](http://gnuarmeclipse.github.io/debug/jlink/).
 
 - Into the debugger launch configuration `GDB SEGGER J-Link Debugging → Debugger`, you should:
-  1. Set `"Cortex-M1"` or `"Cortex-M3"` (depends on MCU) into `J-Link GDB Server Setup → Device name`.
-  2. Replace `gdb` with `gdb-py` in `GDB Client Setup → Executable`.
-  3. Add `-x JFlash.py` into `GDB Client Setup → Other options` (you have to use the full path to the script).
+1. Set `"Cortex-M1"` or `"Cortex-M3"` (depends on MCU) into `J-Link GDB Server Setup → Device name`.
+2. Replace `gdb` with `gdb-py` in `GDB Client Setup → Executable`.
+3. Add `-x JFlash.py` into `GDB Client Setup → Other options` (you have to use the full path to the script).
 
 ![screenshot](doc/pic/README_01.png)
 
