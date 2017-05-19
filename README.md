@@ -36,7 +36,9 @@ in `JFlash` installation path.
 
 It has not been tested on Linux yet...
 
-## How to...
+### How to...
+
+---
 
 <!-- MarkdownTOC autolink="true" bracket="round" depth=0 style="unordered" autoanchor="false" -->
 
@@ -45,6 +47,8 @@ It has not been tested on Linux yet...
 - [How to check the program integrity in EEPROM at runtime](#how-to-check-the-program-integrity-in-eeprom-at-runtime)
 
 <!-- /MarkdownTOC -->
+
+---
 
 #### How to program EEPROM using GNU toolchain
 
