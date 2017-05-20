@@ -11,21 +11,21 @@ Supported microcontrollers: **1986BE9x** (MDR32F9Qx), **1986BE1** (MDR32F1), **1
 
 #### What's the problem?
 
-Unfortunately, SEGGER still knows nothing about EEPROM programming algorithm for Milandr MCU 1986x series.
+Unfortunately, SEGGER still knows nothing about the EEPROM programming algorithm for Milandr MCU 1986x series.
 
-As a result you cannot use the native J-Flash utility. Moreover, you had to use [OpenOCD](http://openocd.org/)
-instead of native drivers for debugging with GNU ARM Eclipse.
+As a result, you are not able to use the native J-Flash utility. Moreover, you have to use [OpenOCD](http://openocd.org/)
+instead of the native drivers for debugging with GNU ARM Eclipse.
 
-OpenOCD is quite good, but at present, slightly less functional, for example,
+OpenOCD is quite good, but at present, it is slightly less functional, for example,
 [OpenOCD debugging Eclipse plug-in](http://gnuarmeclipse.github.io/debug/openocd/)
 does not support a capturing of Serial Wire Output (SWO).
 
-Also you are able to use SEGGER [Real Time Transfer](https://www.segger.com/jlink-rtt.html) (RTT)
+The last problem is that you can use SEGGER [Real Time Transfer](https://www.segger.com/jlink-rtt.html) (RTT)
 only with the native drivers.
 
 #### How does it work?
 
-- LOADER (RAMCode) implements EEPROM programming algorithm.
+- LOADER (RAMCode) implements the EEPROM programming algorithm.
 - GDB script on [Python](https://sourceware.org/gdb/current/onlinedocs/gdb/Python.html) `JFlash.py` redefines
   the GDB `load` command.
 
