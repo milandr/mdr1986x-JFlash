@@ -11,8 +11,8 @@ Supported microcontrollers: **1986BE9x** (MDR32F9Qx), **1986BE1** (MDR32F1), **1
 
 #### What's the problem?
 
-Unfortunately, SEGGER does not know about existence of Milandr MCU 1986x series yet, so the native drivers do not contain
-the EEPROM programming algorithm for them.
+Unfortunately, SEGGER is not aware of Milandr MCU 1986x series existence, so the native drivers do not contain
+the EEPROM programming algorithm for these microcontrollers.
 
 As a result, you are not able to use the native J-Flash utility. Moreover, you have to use [OpenOCD](http://openocd.org/)
 instead of the native drivers for debugging with GNU ARM Eclipse.
