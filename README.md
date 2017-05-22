@@ -53,8 +53,8 @@ It has not been tested on Linux yet...
 
 #### How to program EEPROM using GNU toolchain
 
-- Install [SEGGER J-Link Software](https://www.segger.com/jlink-software.html), tested with `5.10`..`6.12`.
-- Install [GNU toolchain](https://launchpad.net/gcc-arm-embedded), tested with `4.9-2015-q3`.
+- Install [SEGGER J-Link Software](https://www.segger.com/jlink-software.html). The script was tested with JLink `5.10`..`6.12`.
+- Install [GNU toolchain](https://launchpad.net/gcc-arm-embedded). The script was tested with GCC `4.9-2015-q3`.
 - Install Python 2.7 ([32 bit](https://answers.launchpad.net/gcc-arm-embedded/+faq/2601)) and
   set [`PYTHONHOME`](https://docs.python.org/2/using/cmdline.html#environment-variables) and
   [`PYTHONPATH`](https://docs.python.org/2/using/cmdline.html#environment-variables) environment variables.
@@ -64,10 +64,10 @@ You have to run the next command to programming EEPROM:
 ```
 JFlash.bat <BIN_FILE>
 ```
-This batch file starts J-Link GDB server at first, then runs GDB client to execute `program_from_shell`
-function of JFlash script with the name of
+Firstly, the batch file starts J-Link GDB server, then it runs GDB client. The client executes `program_from_shell`
+function from JFlash script with the name of
 [the raw binary file](http://gnuarmeclipse.github.io/plugins/features/#extra-build-steps)
-as argument, something like this:
+as an argument, something like this:
 ```
 start /B JLinkGDBServerCL -if swd -device "Cortex-M1" -endian little -speed 2000 -port 2331 -singlerun
 arm-none-eabi-gdb-py --batch -x JFlash.py -ex "py program_from_shell('yourapp.bin')"
