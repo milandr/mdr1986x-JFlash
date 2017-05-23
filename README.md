@@ -95,11 +95,11 @@ arm-none-eabi-gdb-py --batch -x JFlash.py -ex "py program_from_shell('yourapp.bi
 
 The `JFlash.py` script redefines GDB `load` command, so when Eclipse calls `load`, the script runs instead.
 
-The script creates `JFlash.log` in the folder of the current project, also LOADER prints a trace into RTT.
+The script creates `JFlash.log` in the folder of the current project, also LOADER prints a trace using RTT.
 To launch RTT client (terminal) you should uncomment its call in the batch file.
 
-At the end, if the mapfile of our binary exists, `JFlash.py` sets the address of RTT structure,
-and you are able to interact with the loaded binary using RTT client.
+After programming, if the mapfile of our binary exists, `JFlash.py` will set the address of RTT structure,
+and you will be able to interact with the loaded binary using RTT client.
 There is an example of RTT usage into [`mdr1986x_RTT`](https://github.com/in4lio/mdr1986x-pack-repo/tree/master/source/Example_Projects_Eclipse/mdr1986x_RTT) project.
 
 #### How to check the program integrity in EEPROM at runtime
