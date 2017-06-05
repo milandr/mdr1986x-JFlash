@@ -56,8 +56,8 @@ It has not been tested on __Linux__ yet...
 - Install [SEGGER J-Link Software](https://www.segger.com/jlink-software.html). The script was tested with JLink `5.10`..`6.12`.
 - Install [GNU toolchain](https://launchpad.net/gcc-arm-embedded). The script was tested with GCC `4.9-2015-q3`.
 - Install Python 2.7 ([32 bit](https://answers.launchpad.net/gcc-arm-embedded/+faq/2601)) and
-  set ["PYTHONHOME"](https://docs.python.org/2/using/cmdline.html#environment-variables) and
-  ["PYTHONPATH"](https://docs.python.org/2/using/cmdline.html#environment-variables) environment variables.
+  set [PYTHONHOME](https://docs.python.org/2/using/cmdline.html#environment-variables) and
+  [PYTHONPATH](https://docs.python.org/2/using/cmdline.html#environment-variables) environment variables.
 - You may need to add GNU toolchain path into `PATH` environment variable manually.
 
 You have to run the next command to programming EEPROM:
