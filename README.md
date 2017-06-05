@@ -58,7 +58,7 @@ It has not been tested on __Linux__ yet...
 - Install Python 2.7 ([32 bit](https://answers.launchpad.net/gcc-arm-embedded/+faq/2601)) and
   set [PYTHONHOME](https://docs.python.org/2/using/cmdline.html#environment-variables) and
   [PYTHONPATH](https://docs.python.org/2/using/cmdline.html#environment-variables) environment variables.
-- You may need to add GNU toolchain path into `PATH` environment variable manually.
+- You may need to add GNU toolchain path into PATH environment variable manually.
 
 You have to run the next command to programming EEPROM:
 ```
