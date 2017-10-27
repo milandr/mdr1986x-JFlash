@@ -1,39 +1,34 @@
 # Milandr MCU 1986x flashing with J-Link
 
-#### What's this project for?
+### What's this project for?
 
-- Debugging on [Milandr 32-bit Cortex-М MCU](http://ic.milandr.ru/products/mikrokontrollery_i_protsessory/32_razryadnye_mikrokontrollery/)
-using [GNU ARM Eclipse](http://gnuarmeclipse.github.io/)
-with the native [SEGGER J-Link drivers](https://www.segger.com/jlink-software.html).
-- Internal EEPROM programming using [GNU toolchain](https://launchpad.net/gcc-arm-embedded).
+- Debugging on [Milandr 32-bit Cortex-М MCU][milandr-mdr1986x] using [GNU MCU Eclipse][gnu-mcu-eclipse]
+with the native [SEGGER J-Link drivers][segger-jlink].
+- Internal EEPROM programming using [GNU toolchain][arm-gnu-toolchain].
 
 Supported microcontrollers: **1986BE9x** (MDR32F9Qx), **1986BE1** (MDR32F1), **1986BE3**.
 
-#### What's the problem?
+### What's the problem?
 
 Unfortunately, SEGGER is not aware of Milandr MCU 1986x series existence, so the native drivers do not contain
-the EEPROM programming algorithm for these microcontrollers.
+the EEPROM programming algorithm for these microcontrollers. As a result, you are not able to use the native
+J-Flash utilities.
 
-As a result, you are not able to use the native J-Flash utility. Moreover, you have to use [OpenOCD](http://openocd.org/)
-instead of the native drivers for debugging with GNU ARM Eclipse.
-
+Moreover, you have to use [OpenOCD][open-ocd] instead of the native drivers for debugging with GNU MCU Eclipse.
 OpenOCD is quite good, but at present, it is slightly less functional, for example,
-[OpenOCD debugging Eclipse plug-in](http://gnuarmeclipse.github.io/debug/openocd/)
-does not support a capturing of Serial Wire Output (SWO).
+[OpenOCD debugging Eclipse plug-in][eclipse-openocd] does not support a capturing of Serial Wire Output (SWO).
 
-The last problem is that you can use SEGGER [Real Time Transfer](https://www.segger.com/jlink-rtt.html) (RTT)
-only with the native drivers.
+The last problem is that you can use SEGGER [Real Time Transfer][segger-rtt] (RTT) only with the native drivers.
 
-#### How does it work?
+### How does it work?
 
 - LOADER (RAMCode) implements the EEPROM programming algorithm.
-- GDB script on [Python](https://sourceware.org/gdb/current/onlinedocs/gdb/Python.html) `JFlash.py` redefines
-  the GDB `load` command.
+- GDB script on [Python][gdb-python] – _"JFlash.py"_ redefines the GDB `load` command.
 
-#### Any limits?
+### Any limits?
 
 __Windows__: Some GDB commands do not allow to quote filenames within `""`, so you can NOT use space characters
-in `JFlash` installation path.
+in J-Flash utilities installation path.
 
 It has not been tested on __Linux__ yet...
 
@@ -44,8 +39,8 @@ It has not been tested on __Linux__ yet...
 <!-- MarkdownTOC autolink="true" bracket="round" depth=0 style="unordered" autoanchor="false" -->
 
 - [How to program EEPROM using GNU toolchain](#how-to-program-eeprom-using-gnu-toolchain)
-- [How to debug using GNU ARM Eclipse](#how-to-debug-using-gnu-arm-eclipse)
-- [How to check the program integrity in EEPROM at runtime](#how-to-check-the-program-integrity-in-eeprom-at-runtime)
+- [How to debug using GNU MCU Eclipse](#how-to-debug-using-gnu-mcu-eclipse)
+- [How to check a program integrity in EEPROM at runtime](#how-to-check-a-program-integrity-in-eeprom-at-runtime)
 
 <!-- /MarkdownTOC -->
 
@@ -53,30 +48,28 @@ It has not been tested on __Linux__ yet...
 
 #### How to program EEPROM using GNU toolchain
 
-- Install [SEGGER J-Link Software](https://www.segger.com/jlink-software.html). The script was tested with JLink `5.10`..`6.12`.
-- Install [GNU toolchain](https://launchpad.net/gcc-arm-embedded). The script was tested with GCC `4.9-2015-q3`.
-- Install Python 2.7 ([32 bit](https://answers.launchpad.net/gcc-arm-embedded/+faq/2601)) and
-  set [PYTHONHOME](https://docs.python.org/2/using/cmdline.html#environment-variables) and
-  [PYTHONPATH](https://docs.python.org/2/using/cmdline.html#environment-variables) environment variables.
+- Install [SEGGER J-Link Software][segger-jlink]. The script was tested with JLink `5.10`..`6.12`.
+- Install [GNU toolchain][arm-gnu-toolchain]. The script was tested with GCC `4.9-2015-q3`.
+- Install Python 2.7 ([32 bit][faq-python-32]) and set [PYTHONHOME][python-env] and [PYTHONPATH][python-env]
+environment variables.
 - You may need to add GNU toolchain path into PATH environment variable manually.
 
-You have to run the next command to programming EEPROM:
+After that, you can run the following command to program EEPROM:
 ```
 JFlash.bat <BIN_FILE>
 ```
-Firstly, the batch file starts J-Link GDB server, then it runs GDB client. The client executes `program_from_shell`
-function from JFlash script with the name of
-[the raw binary file](http://gnuarmeclipse.github.io/plugins/features/#extra-build-steps)
-as an argument, something like this:
+First of all, this batch file starts the J-Link GDB server, and then the GDB client. The client executes
+`program_from_shell` function from _"JFlash.py"_ script with the name of [the raw binary file][eclipse-extra]
+as an argument, something like that:
 ```
 start /B JLinkGDBServerCL -if swd -device "Cortex-M1" -endian little -speed 2000 -port 2331 -singlerun
 arm-none-eabi-gdb-py --batch -x JFlash.py -ex "py program_from_shell('yourapp.bin')"
 ```
 
-#### How to debug using GNU ARM Eclipse
+#### How to debug using GNU MCU Eclipse
 
-- Install [GNU ARM Eclipse](http://gnuarmeclipse.github.io/install/).
-- Configure [J-Link debugging Eclipse plug-in](http://gnuarmeclipse.github.io/debug/jlink/).
+- Install [GNU MCU Eclipse][eclipse-install].
+- Configure [J-Link debugging Eclipse plug-in][eclipse-jlink].
 
 - Into the debugger launch configuration `GDB SEGGER J-Link Debugging → Debugger`, you should:
 1. Set `"Cortex-M1"` or `"Cortex-M3"` (depends on MCU) into `J-Link GDB Server Setup → Device name`.
@@ -86,23 +79,37 @@ arm-none-eabi-gdb-py --batch -x JFlash.py -ex "py program_from_shell('yourapp.bi
 ![screenshot](doc/pic/README_01.png)
 
 - Into `GDB SEGGER J-Link Debugging → Startup`, you should select
-  `Load Symbols and Executable → Load Executable → Use file`, and add the name of
-  [the raw binary file](http://gnuarmeclipse.github.io/plugins/features/#extra-build-steps).
-  If you select an ELF file for loading, the script will try to convert it into the raw binary using
-  `arm-none-eabi-objcopy`.
+`Load Symbols and Executable → Load Executable → Use file`, and add the name of
+[the raw binary file][eclipse-extra]. If you select an ELF file for loading, the script
+will try to convert it into the raw binary using _"arm-none-eabi-objcopy"_ utility.
 
 ![screenshot](doc/pic/README_02.png)
 
-The `JFlash.py` script redefines GDB `load` command, so when Eclipse calls `load`, the script runs instead.
+_"JFlash.py"_ script redefines GDB `load` command, so when Eclipse calls `load`, the script runs instead.
 
-The script creates `JFlash.log` in the folder of the current project, also LOADER prints a trace using RTT.
-To launch RTT client (terminal) you should uncomment its call in the batch file.
+The script creates _"JFlash.log"_ in the folder of your current project, also LOADER prints a trace using RTT.
+To launch RTT client (terminal) you should uncomment its call in _"JFlash.bat"_ file.
 
-After programming, if the mapfile of our binary exists, `JFlash.py` will set the address of RTT structure,
+After programming, if the mapfile of our binary exists, _"JFlash.py"_ will set the address of RTT structure,
 and you will be able to interact with the loaded binary using RTT client.
-There is an example of RTT usage into [`mdr1986x_RTT`](https://github.com/in4lio/mdr1986x-pack-repo/tree/master/source/Example_Projects_Eclipse/mdr1986x_RTT) project.
+There is an example of RTT usage into [_"mdr1986x_RTT"_][mdr1986x_rtt] project.
 
-#### How to check the program integrity in EEPROM at runtime
+#### How to check a program integrity in EEPROM at runtime
 
-The `JFlash.py` script writes CRC-32 of the binary file `aligned(4)` right after the image in EEPROM,
-it could be compared with CRC-32 that is being calculated by the program.
+_"JFlash.py"_ script writes CRC-32 of the loaded binary file `aligned(4)` right after the image in EEPROM,
+it could be compared with CRC-32 calculated by your program.
+
+[milandr-mdr1986x]:  http://ic.milandr.ru/products/mikrokontrollery_i_protsessory/32_razryadnye_mikrokontrollery/
+[open-ocd]:          http://openocd.org/
+[segger-jlink]:      https://www.segger.com/jlink-software.html
+[segger-rtt]:        https://www.segger.com/jlink-rtt.html
+[arm-gnu-toolchain]: https://launchpad.net/gcc-arm-embedded/
+[gnu-mcu-eclipse]:   https://gnu-mcu-eclipse.github.io/
+[eclipse-install]:   https://gnu-mcu-eclipse.github.io/install/
+[eclipse-jlink]:     https://gnu-mcu-eclipse.github.io/debug/jlink/
+[eclipse-openocd]:   https://gnu-mcu-eclipse.github.io/debug/openocd/
+[eclipse-extra]:     https://gnu-mcu-eclipse.github.io/plugins/features/#extra-build-steps
+[gdb-python]:        https://sourceware.org/gdb/current/onlinedocs/gdb/Python.html
+[faq-python-32]:     https://answers.launchpad.net/gcc-arm-embedded/+faq/2601
+[python-env]:        https://docs.python.org/2/using/cmdline.html#environment-variables
+[mdr1986x_rtt]:      https://github.com/in4lio/mdr1986x-pack-repo/tree/master/source/Example_Projects_Eclipse/mdr1986x_RTT
