@@ -6,7 +6,7 @@
 with the native [SEGGER J-Link drivers][segger-jlink].
 - Internal EEPROM programming using [GNU toolchain][arm-gnu-toolchain].
 
-Supported microcontrollers: **1986BE9x** (MDR32F9Qx), **1986BE1** (MDR32F1), **1986BE3**.
+Supported microcontrollers: __1986BE9x__ (MDR32F9Qx), __1986BE1__ (MDR32F1), __1986BE3__.
 
 ### What's the problem?
 
