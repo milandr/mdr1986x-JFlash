@@ -22,7 +22,6 @@ PORT              = 2331
 
 LOADER_F9Qx       = 'LOADER/LOADER_F9Qx.bin'
 LOADER_F1         = 'LOADER/LOADER_F1.bin'
-DUMP              = 'dump.bin'
 OBJCOPY           = 'arm-none-eabi-objcopy'
 
 #  LOADER layout (according to MAP file)
@@ -81,6 +80,7 @@ from time import sleep
 import filecmp
 import re
 import binascii
+import tempfile
 
 #  Logging
 LOG               = APP + '.log'
@@ -184,10 +184,11 @@ SCRIPT_DIR = os.path.dirname( os.path.realpath( __file__ ))
 
 #  Verify EEPROM
 def verify( offset, binary, binary_sz ):
-    dump = os.path.join( SCRIPT_DIR, DUMP )
+    dump = tempfile.mktemp()
     dump_binary( dump, offset, binary_sz )
-
-    return filecmp.cmp( binary, dump )
+    cmp_res=filecmp.cmp( binary, dump )
+    os.remove(dump)
+    return cmp_res
 
 # # # # # # # #  MAIN SCRIPT  # # # # # # # #
 
