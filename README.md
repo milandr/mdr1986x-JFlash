@@ -30,8 +30,6 @@ The last problem is that you can use SEGGER [Real Time Transfer][segger-rtt] (RT
 __Windows__: Some GDB commands do not allow to quote filenames within `""`, so you can NOT use space characters
 in J-Flash utilities installation path.
 
-It has not been tested on __Linux__ yet...
-
 ### How to...
 
 ---
