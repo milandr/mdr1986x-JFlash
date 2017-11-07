@@ -186,8 +186,8 @@ SCRIPT_DIR = os.path.dirname( os.path.realpath( __file__ ))
 def verify( offset, binary, binary_sz ):
     dump = tempfile.mktemp()
     dump_binary( dump, offset, binary_sz )
-    cmp_res=filecmp.cmp( binary, dump )
-    os.remove(dump)
+    cmp_res = filecmp.cmp( binary, dump )
+    os.remove( dump )
     return cmp_res
 
 # # # # # # # #  MAIN SCRIPT  # # # # # # # #
